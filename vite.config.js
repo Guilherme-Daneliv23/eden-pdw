@@ -26,5 +26,5 @@ export default defineConfig({
       }
     })
   ],
-  // base: '/eden-pwa/' // <- descomente e ajuste se usar GitHub Pages
+  base: '/eden-pdw/' // <- descomente e ajuste se usar GitHub Pages
 })
