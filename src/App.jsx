@@ -1,12 +1,13 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom"
+import SignUpScreen from "./screens/SignUpScreen"
+
 export default function App() {
   return (
-    <main style={{ padding: 24, fontFamily: 'system-ui, Arial' }}>
-      <h1>👋 PWA React + Vite (JS)</h1>
-      <p>Instalável e com cache offline básico.</p>
-      <ul>
-        <li>Manifest via vite-plugin-pwa</li>
-        <li>Service Worker com autoUpdate</li>
-      </ul>
-    </main>
+    <BrowserRouter  basename="/eden-pdw">
+      <Routes>
+        <Route path="/" element={<h1>Home vazia</h1>} />
+        <Route path="/signup" element={<SignUpScreen />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
