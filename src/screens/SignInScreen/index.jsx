@@ -1,48 +1,27 @@
 import { useState } from "react"
 import { supabase } from "../../services/supabaseClient"
 
-export default function SignUpScreen() {
+export default function SignInScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
 
-  const handleSignUp = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault()
     setLoading(true)
     setMessage(null)
 
-    const { data, error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
 
     if (error) {
-      setMessage("Erro: " + error.message)
+      setMessage("❌ Erro: " + error.message)
     } else {
-      const user = data.user // <- usuário recém-criado
-
-      // Criar um novo casamento vinculado a esse usuário
-      const { error: insertError } = await supabase
-        .from("casamento")
-        .insert([
-          {
-            id_usuario: user.id, // FK para auth.users
-            // pode já iniciar com valores padrão
-            id_orcamento: null,
-            id_convidados: null,
-            id_noivo1: null,
-            id_noivo2: null,
-            id_preferencias: null,
-            id_data: null
-          }
-        ])
-
-      if (insertError) {
-        console.error("Erro ao criar casamento:", insertError.message)
-      } else {
-        setMessage("✅ Conta criada e casamento iniciado!")
-      }
+      setMessage("✅ Login realizado com sucesso!")
+      console.log("Sessão:", data.session)
     }
 
     setLoading(false)
@@ -50,8 +29,8 @@ export default function SignUpScreen() {
 
   return (
     <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
-      <h2>Cadastro</h2>
-      <form onSubmit={handleSignUp}>
+      <h2>Login</h2>
+      <form onSubmit={handleLogin}>
         <div style={{ marginBottom: 12 }}>
           <label>Email:</label><br />
           <input
@@ -69,12 +48,11 @@ export default function SignUpScreen() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
-            minLength={6}
             style={{ width: "100%", padding: 8 }}
           />
         </div>
         <button type="submit" disabled={loading} style={{ padding: 10, width: "100%" }}>
-          {loading ? "Criando conta..." : "Criar conta"}
+          {loading ? "Entrando..." : "Entrar"}
         </button>
       </form>
 
