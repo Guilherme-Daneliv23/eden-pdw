@@ -2,26 +2,23 @@ import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 
-export default function PartyPreferencesScreen() {
-  const options = [
-    "Banda ao vivo",
-    "DJ",
-    "Música ambiente tranquila",
-    "Playlist personalizada",
-    "Outro"
-  ]
-
-  const [selectedOptions, setSelectedOptions] = useState([])
+export default function FirstPriorityPreferencesScreen() {
+  const [selectedOption, setSelectedOption] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
-  const handleToggle = (option) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((o) => o !== option))
-    } else {
-      setSelectedOptions([...selectedOptions, option])
-    }
+  const options = [
+    "Música",
+    "Gastronomia",
+    "Decoração",
+    "Fotografia",
+    "Vestido da noiva",
+    "Outro",
+  ]
+
+  const handleSelect = (option) => {
+    setSelectedOption(option) // apenas um selecionado
   }
 
   const handleSubmit = async (e) => {
@@ -34,7 +31,7 @@ export default function PartyPreferencesScreen() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // 2. busca o casamento vinculado a esse usuário
+      // 2. busca casamento vinculado
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -46,18 +43,18 @@ export default function PartyPreferencesScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // 3a. se já existe, atualiza
+        // 3a. Atualiza se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ musica_festa: selectedOptions })
+          .update({ servico_prioridade: selectedOption })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // 3b. se não existe, cria e vincula ao casamento
+        // 3b. Cria nova preferência e vincula ao casamento
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ musica_festa: selectedOptions }])
+          .insert([{ servico_prioridade: selectedOption }])
           .select("id_preferencias")
           .single()
 
@@ -65,7 +62,6 @@ export default function PartyPreferencesScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
-        // vincula a nova preferência ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -74,10 +70,10 @@ export default function PartyPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de festa salvas com sucesso!")
+      setMessage("✅ Prioridade salva com sucesso!")
 
-      // 🔹 redireciona para próxima tela
-      navigate("/set/preferences/gastronomy-type")
+      // 🔹 Redireciona para próxima tela
+      navigate("/set/preferences/investiment-priority")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -87,32 +83,43 @@ export default function PartyPreferencesScreen() {
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
-      <h2>Como gostariam que fosse a alma da festa?</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="min-h-screen bg-white p-6">
+      <h1 className="text-2xl font-bold mb-6">
+        O que para vocês, é prioridade n° 1?
+      </h1>
+
+      <form onSubmit={handleSubmit} className="space-y-3">
         {options.map((option) => (
-          <div key={option} style={{ marginBottom: 8 }}>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedOptions.includes(option)}
-                onChange={() => handleToggle(option)}
-              />
-              {" "}{option}
-            </label>
-          </div>
+          <label
+            key={option}
+            className={`flex items-center px-4 py-3 rounded-xl border cursor-pointer ${
+              selectedOption === option
+                ? "bg-pink-500 text-white border-pink-500"
+                : "bg-gray-100 text-gray-700 border-gray-300"
+            }`}
+          >
+            <input
+              type="radio"
+              name="priority"
+              value={option}
+              checked={selectedOption === option}
+              onChange={() => handleSelect(option)}
+              className="hidden"
+            />
+            {option}
+          </label>
         ))}
 
         <button
           type="submit"
-          disabled={loading}
-          style={{ padding: 10, width: "100%", marginTop: 20 }}
+          disabled={loading || !selectedOption}
+          className="w-full mt-6 bg-pink-600 text-white py-3 rounded-xl"
         >
-          {loading ? "Salvando..." : "Salvar preferências"}
+          {loading ? "Salvando..." : "Salvar prioridade"}
         </button>
       </form>
 
-      {message && <p style={{ marginTop: 20 }}>{message}</p>}
+      {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
     </div>
   )
 }

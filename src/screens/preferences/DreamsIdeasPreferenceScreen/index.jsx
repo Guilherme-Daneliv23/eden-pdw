@@ -2,29 +2,11 @@ import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 
-export default function DressPreferencesScreen() {
-  const options = [
-    "Princesa",
-    "Sereia",
-    "Curto",
-    "Mid",
-    "Minimalista",
-    "Boho",
-    "Feito sob medida",
-  ]
-
-  const [selectedOptions, setSelectedOptions] = useState([])
+export default function DreamsIdeasPreferenceScreen() {
+  const [dream, setDream] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
-
-  const handleToggle = (option) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((o) => o !== option))
-    } else {
-      setSelectedOptions([...selectedOptions, option])
-    }
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -32,10 +14,11 @@ export default function DressPreferencesScreen() {
     setMessage(null)
 
     try {
+      // 1. pega usuário logado
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // busca casamento do usuário
+      // 2. busca casamento do usuário
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -47,18 +30,18 @@ export default function DressPreferencesScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // já existe → atualiza
+        // Atualiza se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ vestido: selectedOptions })
+          .update({ sonhos_ideias: dream })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // não existe → cria
+        // Cria se ainda não existir
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ vestido: selectedOptions }])
+          .insert([{ sonhos_ideias: dream }])
           .select("id_preferencias")
           .single()
 
@@ -75,10 +58,10 @@ export default function DressPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de vestido salvas com sucesso!")
+      setMessage("✅ Sonho/ideia salvo com sucesso!")
 
-      // 🔹 redireciona para próxima tela
-      navigate("/set/preferences/party")
+      // 🔹 Redireciona para home
+      navigate("/")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -88,32 +71,34 @@ export default function DressPreferencesScreen() {
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
-      <h2>Para você, como seria “O vestido ideal”?</h2>
-      <form onSubmit={handleSubmit}>
-        {options.map((option) => (
-          <div key={option} style={{ marginBottom: 8 }}>
-            <label>
-              <input
-                type="checkbox"
-                checked={selectedOptions.includes(option)}
-                onChange={() => handleToggle(option)}
-              />
-              {" "}{option}
-            </label>
-          </div>
-        ))}
+    <div className="min-h-screen bg-[#F8D7C4] p-6 flex flex-col justify-between">
+      <div>
+        <h1 className="text-xl font-bold text-[#A94F1A] text-center mb-6">
+          Nos conte, existe algo que você sonhou e não encontrou aqui?
+        </h1>
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{ padding: 10, width: "100%", marginTop: 20 }}
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
+        <form onSubmit={handleSubmit} className="space-y-3 w-full max-w-sm mx-auto">
+          <textarea
+            placeholder="Nos diga seu sonho!"
+            value={dream}
+            onChange={(e) => setDream(e.target.value)}
+            className="w-full h-24 p-3 rounded-xl border-2 border-[#A94F1A] text-[#A94F1A] focus:outline-none focus:ring-2 focus:ring-[#A94F1A]"
+            required
+          />
 
-      {message && <p style={{ marginTop: 20 }}>{message}</p>}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full mt-6 bg-[#A94F1A] text-white py-3 rounded-full"
+          >
+            {loading ? "Salvando..." : "Finalizar"}
+          </button>
+        </form>
+      </div>
+
+      {message && (
+        <p className="mt-4 text-center text-[#A94F1A]">{message}</p>
+      )}
     </div>
   )
 }

@@ -1,34 +1,38 @@
 import { useState } from "react"
 import { supabase } from "../../services/supabaseClient"
+import { useNavigate } from "react-router-dom"
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
+  const navigate = useNavigate()
 
   const handleSignUp = async (e) => {
     e.preventDefault()
     setLoading(true)
     setMessage(null)
 
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-    })
+    try {
+      // 1. Cria usuário e já inicia sessão
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { emailRedirectTo: window.location.origin } // mantém a sessão
+      })
 
-    if (error) {
-      setMessage("Erro: " + error.message)
-    } else {
-      const user = data.user // <- usuário recém-criado
+      if (error) throw error
 
-      // Criar um novo casamento vinculado a esse usuário
+      const user = data.user
+      if (!user) throw new Error("Não foi possível obter o usuário após o cadastro.")
+
+      // 2. Cria um novo casamento vinculado a esse usuário
       const { error: insertError } = await supabase
         .from("casamento")
         .insert([
           {
             id_usuario: user.id, // FK para auth.users
-            // pode já iniciar com valores padrão
             id_orcamento: null,
             id_convidados: null,
             id_noivo1: null,
@@ -38,11 +42,15 @@ export default function SignUpScreen() {
           }
         ])
 
-      if (insertError) {
-        console.error("Erro ao criar casamento:", insertError.message)
-      } else {
-        setMessage("✅ Conta criada e casamento iniciado!")
-      }
+      if (insertError) throw insertError
+
+      setMessage("✅ Conta criada, sessão iniciada e casamento iniciado!")
+
+      // 3. Redireciona para a próxima tela (exemplo: cadastro dos noivos)
+      setTimeout(() => navigate("/set/grooms"), 1200)
+
+    } catch (err) {
+      setMessage("Erro: " + err.message)
     }
 
     setLoading(false)

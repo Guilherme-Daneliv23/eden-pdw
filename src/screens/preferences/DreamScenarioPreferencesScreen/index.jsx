@@ -2,12 +2,14 @@ import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 
-export default function PartyPreferencesScreen() {
+export default function DreamScenarioPreferencesScreen() {
   const options = [
-    "Banda ao vivo",
-    "DJ",
-    "Música ambiente tranquila",
-    "Playlist personalizada",
+    "Igreja (Tradicional)",
+    "Praia",
+    "Jardim",
+    "Campo",
+    "Salão de festas",
+    "Chácara",
     "Outro"
   ]
 
@@ -30,11 +32,11 @@ export default function PartyPreferencesScreen() {
     setMessage(null)
 
     try {
-      // 1. pega o usuário logado
+      // pega usuário logado
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // 2. busca o casamento vinculado a esse usuário
+      // busca casamento do usuário
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -46,18 +48,18 @@ export default function PartyPreferencesScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // 3a. se já existe, atualiza
+        // se já existe, atualiza
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ musica_festa: selectedOptions })
+          .update({ local: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // 3b. se não existe, cria e vincula ao casamento
+        // se não existe, cria
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ musica_festa: selectedOptions }])
+          .insert([{ local: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -74,10 +76,10 @@ export default function PartyPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de festa salvas com sucesso!")
+      setMessage("✅ Cenário dos sonhos salvo com sucesso!")
 
-      // 🔹 redireciona para próxima tela
-      navigate("/set/preferences/gastronomy-type")
+      // 🔹 Redireciona para a próxima tela
+      navigate("/set/preferences/decoration")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -88,7 +90,7 @@ export default function PartyPreferencesScreen() {
 
   return (
     <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
-      <h2>Como gostariam que fosse a alma da festa?</h2>
+      <h2>Qual seria o cenário dos seus sonhos?</h2>
       <form onSubmit={handleSubmit}>
         {options.map((option) => (
           <div key={option} style={{ marginBottom: 8 }}>

@@ -2,23 +2,24 @@ import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 
-export default function PartyPreferencesScreen() {
-  const options = [
-    "Banda ao vivo",
-    "DJ",
-    "Música ambiente tranquila",
-    "Playlist personalizada",
-    "Outro"
-  ]
-
+export default function GastronomyCakePreferencesScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
-  const handleToggle = (option) => {
+  const options = [
+    "Chocolate",
+    "Ninho com Nutella",
+    "Frutas",
+    "Doce de leite",
+    "Red Velvet",
+    "Outro",
+  ]
+
+  const toggleOption = (option) => {
     if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((o) => o !== option))
+      setSelectedOptions(selectedOptions.filter((item) => item !== option))
     } else {
       setSelectedOptions([...selectedOptions, option])
     }
@@ -30,11 +31,11 @@ export default function PartyPreferencesScreen() {
     setMessage(null)
 
     try {
-      // 1. pega o usuário logado
+      // 1. pega usuário logado
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // 2. busca o casamento vinculado a esse usuário
+      // 2. busca casamento do usuário
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -46,18 +47,18 @@ export default function PartyPreferencesScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // 3a. se já existe, atualiza
+        // Atualiza se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ musica_festa: selectedOptions })
+          .update({ gastronomia_bolo: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // 3b. se não existe, cria e vincula ao casamento
+        // Cria se ainda não existir
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ musica_festa: selectedOptions }])
+          .insert([{ gastronomia_bolo: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -65,7 +66,7 @@ export default function PartyPreferencesScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
-        // vincula a nova preferência ao casamento
+        // vincula ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -74,10 +75,10 @@ export default function PartyPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de festa salvas com sucesso!")
+      setMessage("✅ Preferências de bolo salvas com sucesso!")
 
-      // 🔹 redireciona para próxima tela
-      navigate("/set/preferences/gastronomy-type")
+      // 🔹 Redireciona para próxima tela
+      navigate("/set/preferences/dream-scenario")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -87,32 +88,38 @@ export default function PartyPreferencesScreen() {
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
-      <h2>Como gostariam que fosse a alma da festa?</h2>
-      <form onSubmit={handleSubmit}>
-        {options.map((option) => (
-          <div key={option} style={{ marginBottom: 8 }}>
-            <label>
+    <div className="min-h-screen bg-[#F8D7C4] p-6 flex flex-col justify-between">
+      <div>
+        <h1 className="text-xl font-bold text-[#A94F1A] text-center mb-6">
+          Os favoritos para o sabor do bolo
+        </h1>
+
+        <form onSubmit={handleSubmit} className="space-y-3 w-full max-w-sm mx-auto">
+          {options.map((option) => (
+            <label key={option} className="flex items-center space-x-3 text-[#A94F1A] cursor-pointer">
               <input
                 type="checkbox"
                 checked={selectedOptions.includes(option)}
-                onChange={() => handleToggle(option)}
+                onChange={() => toggleOption(option)}
+                className="w-4 h-4 border-2 border-[#A94F1A] rounded-sm cursor-pointer"
               />
-              {" "}{option}
+              <span>{option}</span>
             </label>
-          </div>
-        ))}
+          ))}
 
-        <button
-          type="submit"
-          disabled={loading}
-          style={{ padding: 10, width: "100%", marginTop: 20 }}
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full mt-6 bg-[#A94F1A] text-white py-3 rounded-full"
+          >
+            {loading ? "Salvando..." : "Continuar"}
+          </button>
+        </form>
+      </div>
 
-      {message && <p style={{ marginTop: 20 }}>{message}</p>}
+      {message && (
+        <p className="mt-4 text-center text-[#A94F1A]">{message}</p>
+      )}
     </div>
   )
 }
