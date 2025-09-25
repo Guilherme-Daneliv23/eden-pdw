@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState("")
@@ -15,11 +19,10 @@ export default function SignUpScreen() {
     setMessage(null)
 
     try {
-      // 1. Cria usuário e já inicia sessão
       const { data, error } = await supabase.auth.signUp({
         email,
         password,
-        options: { emailRedirectTo: window.location.origin } // mantém a sessão
+        options: { emailRedirectTo: window.location.origin }
       })
 
       if (error) throw error
@@ -27,12 +30,11 @@ export default function SignUpScreen() {
       const user = data.user
       if (!user) throw new Error("Não foi possível obter o usuário após o cadastro.")
 
-      // 2. Cria um novo casamento vinculado a esse usuário
       const { error: insertError } = await supabase
         .from("casamento")
         .insert([
           {
-            id_usuario: user.id, // FK para auth.users
+            id_usuario: user.id,
             id_orcamento: null,
             id_convidados: null,
             id_noivo1: null,
@@ -46,7 +48,6 @@ export default function SignUpScreen() {
 
       setMessage("✅ Conta criada, sessão iniciada e casamento iniciado!")
 
-      // 3. Redireciona para a próxima tela (exemplo: cadastro dos noivos)
       setTimeout(() => navigate("/set/grooms"), 1200)
 
     } catch (err) {
@@ -57,34 +58,46 @@ export default function SignUpScreen() {
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
-      <h2>Cadastro</h2>
-      <form onSubmit={handleSignUp}>
-        <div style={{ marginBottom: 12 }}>
-          <label>Email:</label><br />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: "100%", padding: 8 }}
-          />
-        </div>
-        <div style={{ marginBottom: 12 }}>
-          <label>Senha:</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            style={{ width: "100%", padding: 8 }}
-          />
-        </div>
-        <button type="submit" disabled={loading} style={{ padding: 10, width: "100%" }}>
-          {loading ? "Criando conta..." : "Criar conta"}
-        </button>
-      </form>
+    <div className="tela">
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
+
+      <div className="areaForms">
+        <h2>Bem-vindos,<br/>noivos!</h2>
+
+        <form onSubmit={handleSignUp}>
+          <div className="inputBox">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder=" "
+            />
+            <label>Email</label>
+          </div>
+
+          <div className="inputBox">
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              placeholder=" "
+            />
+            <label>Senha</label>
+          </div>
+          <button className="btn btnBg" type="submit" disabled={loading}>
+            {loading ? "Criando conta..." : "Criar conta"}
+          </button>
+        </form>
+      </div>
+
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && <p style={{ marginTop: 20 }}>{message}</p>}
     </div>

@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../assets/logoHorizontal.png"; 
 
 export default function SignInScreen() {
   const [email, setEmail] = useState("")
@@ -20,56 +24,61 @@ export default function SignInScreen() {
     })
 
     if (error) {
-      setMessage("❌ Erro: " + error.message)
+      setMessage("Erro: " + error.message)
     } else {
-      setMessage("✅ Login realizado com sucesso!")
+      setMessage("Login realizado com sucesso!")
       console.log("Sessão:", data.session)
-      // Se quiser redirecionar após login, pode usar navigate("/rota")
     }
-
     setLoading(false)
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <div style={{ marginBottom: 12 }}>
-          <label>Email:</label><br />
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: "100%", padding: 8 }}
-          />
-        </div>
-        <div style={{ marginBottom: 12 }}>
-          <label>Senha:</label><br />
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            style={{ width: "100%", padding: 8 }}
-          />
-        </div>
-        <button type="submit" disabled={loading} style={{ padding: 10, width: "100%" }}>
-          {loading ? "Entrando..." : "Entrar"}
-        </button>
-      </form>
+    <div className="tela">
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
+      
+      <div className="areaForms">
+        <h2>Bem-vindos,<br/>noivos!</h2>
 
-      <div style={{ marginTop: 20, textAlign: "center" }}>
-        <p>Não tem conta?</p>
-        <button
-          onClick={() => navigate("/signup")}
-          style={{ padding: 10, marginTop: 8, width: "100%", background: "#4CAF50", color: "white", border: "none", borderRadius: 4 }}
-        >
-          Cadastre-se
+        <form onSubmit={handleLogin}>
+          <div className="inputBox">
+            <input 
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder=" "
+            />
+            <label>Email</label>
+          </div>
+
+          <div className="inputBox">
+            <input 
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              placeholder=" "
+            />
+            <label>Senha</label>
+          </div>
+
+          <button className="btn btnBg" type="submit" disabled={loading}>
+            {loading ? "Entrando..." : "Entrar"}
+          </button>
+        </form>
+
+        <button className="btn btnT" onClick={() => navigate("/signup")}>
+          Criar nova conta
         </button>
+
+        <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
+
+        {message && <p style={{ marginTop: 20 }}>{message}</p>}
       </div>
-
-      {message && <p style={{ marginTop: 20 }}>{message}</p>}
     </div>
   )
 }

@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../../assets/logoHorizontal.png";
 
 export default function PartyPreferencesScreen() {
   const options = [
@@ -87,13 +91,13 @@ export default function PartyPreferencesScreen() {
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
+    <div className="tela">
       <h2>Como gostariam que fosse a alma da festa?</h2>
       <form onSubmit={handleSubmit}>
         {options.map((option) => (
-          <div key={option} style={{ marginBottom: 8 }}>
-            <label>
-              <input
+          <div key={option}>
+            <label className="labelCheckbox">
+              <input className="checkbox"
                 type="checkbox"
                 checked={selectedOptions.includes(option)}
                 onChange={() => handleToggle(option)}
@@ -106,7 +110,7 @@ export default function PartyPreferencesScreen() {
         <button
           type="submit"
           disabled={loading}
-          style={{ padding: 10, width: "100%", marginTop: 20 }}
+          className="btn btnBg"
         >
           {loading ? "Salvando..." : "Salvar preferências"}
         </button>

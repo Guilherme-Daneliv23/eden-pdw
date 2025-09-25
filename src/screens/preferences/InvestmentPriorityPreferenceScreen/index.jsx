@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../../assets/logoHorizontal.png";
 
 export default function InvestmentPriorityPreferenceScreen() {
   const [selectedOption, setSelectedOption] = useState("")
@@ -83,10 +87,10 @@ export default function InvestmentPriorityPreferenceScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-white p-6">
-      <h1 className="text-2xl font-bold mb-6">
+    <div className="tela">
+      <h2>
         O maior investimento será em qual parte?
-      </h1>
+      </h2>
 
       <form onSubmit={handleSubmit} className="space-y-3">
         {options.map((option) => (
@@ -113,7 +117,7 @@ export default function InvestmentPriorityPreferenceScreen() {
         <button
           type="submit"
           disabled={loading || !selectedOption}
-          className="w-full mt-6 bg-pink-600 text-white py-3 rounded-xl"
+          className="btn btnBg"
         >
           {loading ? "Salvando..." : "Salvar investimento"}
         </button>

@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../../assets/logoHorizontal.png";
 
 export default function DreamScenarioPreferencesScreen() {
   const options = [
@@ -89,16 +93,17 @@ export default function DreamScenarioPreferencesScreen() {
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
+    <div className="tela">
       <h2>Qual seria o cenário dos seus sonhos?</h2>
       <form onSubmit={handleSubmit}>
         {options.map((option) => (
-          <div key={option} style={{ marginBottom: 8 }}>
-            <label>
+          <div key={option}>
+            <label className="labelCheckbox">
               <input
                 type="checkbox"
                 checked={selectedOptions.includes(option)}
                 onChange={() => handleToggle(option)}
+                className="checkbox"
               />
               {" "}{option}
             </label>
@@ -108,7 +113,7 @@ export default function DreamScenarioPreferencesScreen() {
         <button
           type="submit"
           disabled={loading}
-          style={{ padding: 10, width: "100%", marginTop: 20 }}
+          className="btn btnBg"
         >
           {loading ? "Salvando..." : "Salvar preferências"}
         </button>

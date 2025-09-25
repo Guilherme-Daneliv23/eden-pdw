@@ -89,20 +89,20 @@ export default function GastronomyMainOptionsPreferencesScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8D7C4] p-6 flex flex-col justify-between">
+    <div className="tela">
       <div>
-        <h1 className="text-xl font-bold text-[#A94F1A] text-center mb-6">
+        <h2>
           O que não pode faltar no cardápio?
-        </h1>
+        </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-3 w-full max-w-sm mx-auto">
+        <form onSubmit={handleSubmit}>
           {options.map((option) => (
-            <label key={option} className="flex items-center space-x-3 text-[#A94F1A] cursor-pointer">
+            <label key={option} className="labelCheckbox">
               <input
                 type="checkbox"
                 checked={selectedOptions.includes(option)}
                 onChange={() => toggleOption(option)}
-                className="w-4 h-4 border-2 border-[#A94F1A] rounded-sm cursor-pointer"
+                className="checkbox"
               />
               <span>{option}</span>
             </label>
@@ -111,7 +111,7 @@ export default function GastronomyMainOptionsPreferencesScreen() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-6 bg-[#A94F1A] text-white py-3 rounded-full"
+            className="btn btnBg"
           >
             {loading ? "Salvando..." : "Continuar"}
           </button>

@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
 export default function GroomsScreen() {
   const [noivo1, setNoivo1] = useState({
@@ -80,11 +84,11 @@ export default function GroomsScreen() {
   }
 
   return (
-    <div style={{ maxWidth: 500, margin: "50px auto", fontFamily: "Arial" }}>
+    <div className="tela">
       <h2>Cadastro dos Noivos</h2>
       <form onSubmit={handleSubmit}>
         {[noivo1, noivo2].map((noivo, index) => (
-          <div key={index} style={{ marginBottom: 20 }}>
+          <div className="mb-5" key={index}>
             <h3>Noivo {index + 1}</h3>
             <input
               type="text"
@@ -117,7 +121,7 @@ export default function GroomsScreen() {
           </div>
         ))}
 
-        <button type="submit" disabled={loading} style={{ padding: 10, width: "100%" }}>
+        <button className="btn btnBg" type="submit" disabled={loading}>
           {loading ? "Salvando..." : "Salvar Noivos"}
         </button>
       </form>

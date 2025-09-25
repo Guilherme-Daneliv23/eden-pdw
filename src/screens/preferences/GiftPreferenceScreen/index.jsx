@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../../assets/logoHorizontal.png";
 
 export default function GiftPreferenceScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
@@ -88,22 +92,22 @@ export default function GiftPreferenceScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-white p-6">
-      <h1 className="text-2xl font-bold mb-6">
+    <div className="tela">
+      <h2>
         Que tipo de lembrancinha seus convidados terão desse dia?
-      </h1>
+      </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit}>
         {options.map((option) => (
           <label
             key={option}
-            className="flex items-center space-x-3 cursor-pointer text-gray-700"
+            className="labelCheckbox"
           >
             <input
               type="checkbox"
               checked={selectedOptions.includes(option)}
               onChange={() => toggleOption(option)}
-              className="w-4 h-4 border-pink-600 rounded"
+              className="checkbox"
             />
             <span>{option}</span>
           </label>
@@ -112,7 +116,7 @@ export default function GiftPreferenceScreen() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-6 bg-pink-600 text-white py-3 rounded-xl"
+          className="btn btnBg"
         >
           {loading ? "Salvando..." : "Salvar preferências"}
         </button>

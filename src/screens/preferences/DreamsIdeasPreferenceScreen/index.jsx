@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../../assets/logoHorizontal.png";
 
 export default function DreamsIdeasPreferenceScreen() {
   const [dream, setDream] = useState("")
@@ -71,11 +75,11 @@ export default function DreamsIdeasPreferenceScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8D7C4] p-6 flex flex-col justify-between">
+    <div className="tela">
       <div>
-        <h1 className="text-xl font-bold text-[#A94F1A] text-center mb-6">
+        <h2>
           Nos conte, existe algo que você sonhou e não encontrou aqui?
-        </h1>
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-3 w-full max-w-sm mx-auto">
           <textarea
@@ -89,7 +93,7 @@ export default function DreamsIdeasPreferenceScreen() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full mt-6 bg-[#A94F1A] text-white py-3 rounded-full"
+            className="btn btnBg"
           >
             {loading ? "Salvando..." : "Finalizar"}
           </button>

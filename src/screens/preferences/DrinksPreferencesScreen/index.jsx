@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../../assets/logoHorizontal.png";
 
 export default function DrinksPreferencesScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
@@ -87,22 +91,22 @@ export default function DrinksPreferencesScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-white p-6">
-      <h1 className="text-2xl font-bold mb-6">
+    <div className="tela">
+      <h2>
         E quanto às bebidas, o que gostaria de fazer?
-      </h1>
+      </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <form onSubmit={handleSubmit}>
         {options.map((option) => (
           <label
             key={option}
-            className="flex items-center space-x-3 cursor-pointer"
+            className="labelCheckbox"
           >
             <input
               type="checkbox"
               checked={selectedOptions.includes(option)}
               onChange={() => toggleOption(option)}
-              className="w-4 h-4 text-pink-500 border-gray-300 rounded"
+              className="checkbox"
             />
             <span>{option}</span>
           </label>
@@ -111,7 +115,7 @@ export default function DrinksPreferencesScreen() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full mt-6 bg-pink-600 text-white py-3 rounded-xl"
+          className="btn btnBg"
         >
           {loading ? "Salvando..." : "Salvar preferências"}
         </button>

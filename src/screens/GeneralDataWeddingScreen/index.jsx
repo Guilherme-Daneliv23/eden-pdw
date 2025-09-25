@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
 export default function GeneralDataWeddingScreen() {
   const [budget, setBudget] = useState("")
@@ -124,40 +128,43 @@ export default function GeneralDataWeddingScreen() {
   }
 
   return (
-    <div style={{ maxWidth: 400, margin: "50px auto", fontFamily: "Arial" }}>
+    <div className="tela">
       <h2>Planejamento do Casamento</h2>
       <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: 12 }}>
-          <label>Até quanto espera gastar?</label><br />
+        <div className="inputBox">
           <input
             type="number"
             value={budget}
             onChange={(e) => setBudget(e.target.value)}
             required
-            style={{ width: "100%", padding: 8 }}
+            placeholder=" "
           />
+          <label>Até quanto espera gastar?</label>
         </div>
-        <div style={{ marginBottom: 12 }}>
-          <label>Qual a data ideal?</label><br />
+        
+        <div className="inputBox">
           <input
             type="date"
             value={weddingDate}
             onChange={(e) => setWeddingDate(e.target.value)}
             required
-            style={{ width: "100%", padding: 8 }}
+            placeholder=" "
           />
+          <label>Qual a data ideal?</label>
         </div>
-        <div style={{ marginBottom: 12 }}>
-          <label>Em média, quantos convidados?</label><br />
+
+        <div className="inputBox">
           <input
             type="number"
             value={guests}
             onChange={(e) => setGuests(e.target.value)}
             required
-            style={{ width: "100%", padding: 8 }}
+            placeholder=" "
           />
+          <label>Em média, quantos convidados?</label>
         </div>
-        <button type="submit" disabled={loading} style={{ padding: 10, width: "100%" }}>
+
+        <button className="btn btnBg" type="submit" disabled={loading} style={{ padding: 10, width: "100%" }}>
           {loading ? "Salvando..." : "Salvar informações"}
         </button>
       </form>

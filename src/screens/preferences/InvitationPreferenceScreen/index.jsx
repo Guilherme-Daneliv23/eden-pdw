@@ -1,6 +1,10 @@
 import React, { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../../assets/logoHorizontal.png";
 
 export default function InvitationPreferenceScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
@@ -81,22 +85,18 @@ export default function InvitationPreferenceScreen() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8D7C4] p-6">
-      <h1 className="text-xl font-bold text-[#A94F1A] text-center mb-6">
+    <div className="tela">
+      <h2>
         Como querem enviar esse convite tão especial?
-      </h1>
+      </h2>
 
-      <form onSubmit={handleSubmit} className="space-y-3 w-full max-w-sm">
+      <form onSubmit={handleSubmit}>
         {options.map((option, index) => (
-          <label
-            key={index}
-            className="flex items-center space-x-3 text-[#A94F1A] cursor-pointer"
-          >
-            <input
+          <label key={index} className="labelCheckbox">
+            <input className="checkbox"
               type="checkbox"
               checked={selectedOptions.includes(option)}
               onChange={() => handleSelect(option)}
-              className="w-4 h-4 border-2 border-[#A94F1A] rounded-sm cursor-pointer"
             />
             <span>{option}</span>
           </label>
@@ -105,7 +105,7 @@ export default function InvitationPreferenceScreen() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-4 w-full bg-[#A94F1A] text-white py-2 rounded-md"
+          className="btn btnBg"
         >
           {loading ? "Salvando..." : "Salvar preferências"}
         </button>

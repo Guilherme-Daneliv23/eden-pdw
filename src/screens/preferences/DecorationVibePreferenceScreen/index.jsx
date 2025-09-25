@@ -1,6 +1,10 @@
 import React, { useState } from "react"
 import { supabase } from "../../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../../assets/logoHorizontal.png";
 
 export default function DecorationVibePreferenceScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
@@ -88,21 +92,21 @@ export default function DecorationVibePreferenceScreen() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8D7C4] p-6">
-      <h1 className="text-xl font-bold text-[#A94F1A] text-center mb-6">
+    <div className="tela">
+      <h2>
         Qual a vibe de vocês para a decoração do casamento?
-      </h1>
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-3">
+      </h2>
+      <form onSubmit={handleSubmit}>
         {options.map((option, index) => (
           <label
             key={index}
-            className="flex items-center space-x-3 text-[#A94F1A] cursor-pointer"
+            className="labelCheckbox"
           >
             <input
               type="checkbox"
               checked={selectedOptions.includes(option)}
               onChange={() => handleSelect(option)}
-              className="w-4 h-4 border-2 border-[#A94F1A] rounded-sm cursor-pointer"
+              className="checkbox"
             />
             <span>{option}</span>
           </label>
@@ -111,7 +115,7 @@ export default function DecorationVibePreferenceScreen() {
         <button
           type="submit"
           disabled={loading}
-          className="mt-4 w-full bg-[#A94F1A] text-white py-2 rounded-md"
+          className="btn btnBg"
         >
           {loading ? "Salvando..." : "Salvar preferências"}
         </button>
