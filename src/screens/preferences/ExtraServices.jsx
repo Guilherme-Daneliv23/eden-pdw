@@ -1,20 +1,26 @@
-import React, { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import { useState } from "react"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 import "../style.css"
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../../assets/logoHorizontal.png";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function InvitationPreferenceScreen() {
+export default function ExtraServicesPreferencesScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
-  const options = ["Físico (Tradicional)", "Digital", "Outro"]
+  const options = [
+    "Espaço kids",
+    "Flash tattoo",
+    "Carro especial para os noivos",
+    "Cabine de foto 360°",
+    "Outro",
+  ]
 
-  const handleSelect = (option) => {
+  const toggleOption = (option) => {
     if (selectedOptions.includes(option)) {
       setSelectedOptions(selectedOptions.filter((item) => item !== option))
     } else {
@@ -44,18 +50,18 @@ export default function InvitationPreferenceScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // 3a. atualiza preferências se já existir
+        // 3a. Atualiza preferências
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ convite: selectedOptions })
+          .update({ servicos_extra: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // 3b. cria preferências se não existir
+        // 3b. Cria novas preferências e vincula
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ convite: selectedOptions }])
+          .insert([{ servicos_extra: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -63,7 +69,6 @@ export default function InvitationPreferenceScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
-        // vincula ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -72,10 +77,10 @@ export default function InvitationPreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de convite salvas com sucesso!")
+      setMessage("✅ Preferências de serviços extras salvas com sucesso!")
 
-      // 🔹 Redireciona para a tela de lembrancinhas
-      navigate("/set/preferences/gift")
+      // 🔹 Redireciona para a próxima tela
+      navigate("/set/preferences/dreams-ideas")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -87,16 +92,17 @@ export default function InvitationPreferenceScreen() {
   return (
     <div className="tela">
       <h2>
-        Como querem enviar esse convite tão especial?
+        Gostaria de ter algum serviço extra?
       </h2>
 
       <form onSubmit={handleSubmit}>
-        {options.map((option, index) => (
-          <label key={index} className="labelCheckbox">
-            <input className="checkbox"
+        {options.map((option) => (
+          <label key={option} className="labelCheckbox">
+            <input
               type="checkbox"
               checked={selectedOptions.includes(option)}
-              onChange={() => handleSelect(option)}
+              onChange={() => toggleOption(option)}
+              className="checkbox"
             />
             <span>{option}</span>
           </label>
@@ -112,7 +118,7 @@ export default function InvitationPreferenceScreen() {
       </form>
 
       {message && (
-        <p className="mt-4 text-center text-[#A94F1A] font-medium">{message}</p>
+        <p className="mt-4 text-center text-gray-700">{message}</p>
       )}
     </div>
   )

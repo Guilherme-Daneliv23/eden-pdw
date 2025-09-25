@@ -1,24 +1,20 @@
-import { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import React, { useState } from "react"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
+import "../style.css"
+import "@fontsource/roboto";
+import "@fontsource/roboto/700.css";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function GastronomyMainOptionsPreferencesScreen() {
+export default function InvitationPreferenceScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
-  const options = [
-    "Massas",
-    "Churrasco",
-    "Frutos do mar",
-    "Opções vegetarianas",
-    "Opções veganas",
-    "Comida regional típica",
-    "Outro",
-  ]
+  const options = ["Físico (Tradicional)", "Digital", "Outro"]
 
-  const toggleOption = (option) => {
+  const handleSelect = (option) => {
     if (selectedOptions.includes(option)) {
       setSelectedOptions(selectedOptions.filter((item) => item !== option))
     } else {
@@ -48,18 +44,18 @@ export default function GastronomyMainOptionsPreferencesScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // Atualiza se já existir
+        // 3a. atualiza preferências se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ gastronomia_opcao_principal: selectedOptions })
+          .update({ convite: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // Cria se ainda não existir
+        // 3b. cria preferências se não existir
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ gastronomia_opcao_principal: selectedOptions }])
+          .insert([{ convite: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -76,10 +72,10 @@ export default function GastronomyMainOptionsPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Opções principais de gastronomia salvas com sucesso!")
+      setMessage("✅ Preferências de convite salvas com sucesso!")
 
-      // 🔹 Redireciona para próxima tela
-      navigate("/set/preferences/gastronomy-cake")
+      // 🔹 Redireciona para a tela de lembrancinhas
+      navigate("/set/preferences/gift")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -90,36 +86,33 @@ export default function GastronomyMainOptionsPreferencesScreen() {
 
   return (
     <div className="tela">
-      <div>
-        <h2>
-          O que não pode faltar no cardápio?
-        </h2>
+      <h2>
+        Como querem enviar esse convite tão especial?
+      </h2>
 
-        <form onSubmit={handleSubmit}>
-          {options.map((option) => (
-            <label key={option} className="labelCheckbox">
-              <input
-                type="checkbox"
-                checked={selectedOptions.includes(option)}
-                onChange={() => toggleOption(option)}
-                className="checkbox"
-              />
-              <span>{option}</span>
-            </label>
-          ))}
+      <form onSubmit={handleSubmit}>
+        {options.map((option, index) => (
+          <label key={index} className="labelCheckbox">
+            <input className="checkbox"
+              type="checkbox"
+              checked={selectedOptions.includes(option)}
+              onChange={() => handleSelect(option)}
+            />
+            <span>{option}</span>
+          </label>
+        ))}
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn btnBg"
-          >
-            {loading ? "Salvando..." : "Continuar"}
-          </button>
-        </form>
-      </div>
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn btnBg"
+        >
+          {loading ? "Salvando..." : "Salvar preferências"}
+        </button>
+      </form>
 
       {message && (
-        <p className="mt-4 text-center text-[#A94F1A]">{message}</p>
+        <p className="mt-4 text-center text-[#A94F1A] font-medium">{message}</p>
       )}
     </div>
   )

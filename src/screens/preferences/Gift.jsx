@@ -1,30 +1,29 @@
 import { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 import "../style.css"
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../../assets/logoHorizontal.png";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function DreamScenarioPreferencesScreen() {
-  const options = [
-    "Igreja (Tradicional)",
-    "Praia",
-    "Jardim",
-    "Campo",
-    "Salão de festas",
-    "Chácara",
-    "Outro"
-  ]
-
+export default function GiftPreferenceScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
-  const handleToggle = (option) => {
+  const options = [
+    "Comestível",
+    "Utilitária",
+    "Decorativa",
+    "Plantinha",
+    "Sem lembrancinha",
+    "Outro",
+  ]
+
+  const toggleOption = (option) => {
     if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((o) => o !== option))
+      setSelectedOptions(selectedOptions.filter((item) => item !== option))
     } else {
       setSelectedOptions([...selectedOptions, option])
     }
@@ -36,11 +35,11 @@ export default function DreamScenarioPreferencesScreen() {
     setMessage(null)
 
     try {
-      // pega usuário logado
+      // 1. pega o usuário logado
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // busca casamento do usuário
+      // 2. busca casamento desse usuário
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -52,18 +51,18 @@ export default function DreamScenarioPreferencesScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // se já existe, atualiza
+        // 3a. Atualiza preferências se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ local: selectedOptions })
+          .update({ lembranca: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // se não existe, cria
+        // 3b. Cria preferências se ainda não existir
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ local: selectedOptions }])
+          .insert([{ lembranca: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -71,7 +70,7 @@ export default function DreamScenarioPreferencesScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
-        // vincula a nova preferência ao casamento
+        // Vincula ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -80,10 +79,10 @@ export default function DreamScenarioPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Cenário dos sonhos salvo com sucesso!")
+      setMessage("✅ Preferência de lembrancinhas salva com sucesso!")
 
-      // 🔹 Redireciona para a próxima tela
-      navigate("/set/preferences/decoration")
+      // 🔹 Redireciona para próxima tela
+      navigate("/set/preferences/first-priority")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -94,20 +93,24 @@ export default function DreamScenarioPreferencesScreen() {
 
   return (
     <div className="tela">
-      <h2>Qual seria o cenário dos seus sonhos?</h2>
+      <h2>
+        Que tipo de lembrancinha seus convidados terão desse dia?
+      </h2>
+
       <form onSubmit={handleSubmit}>
         {options.map((option) => (
-          <div key={option}>
-            <label className="labelCheckbox">
-              <input
-                type="checkbox"
-                checked={selectedOptions.includes(option)}
-                onChange={() => handleToggle(option)}
-                className="checkbox"
-              />
-              {" "}{option}
-            </label>
-          </div>
+          <label
+            key={option}
+            className="labelCheckbox"
+          >
+            <input
+              type="checkbox"
+              checked={selectedOptions.includes(option)}
+              onChange={() => toggleOption(option)}
+              className="checkbox"
+            />
+            <span>{option}</span>
+          </label>
         ))}
 
         <button
@@ -119,7 +122,9 @@ export default function DreamScenarioPreferencesScreen() {
         </button>
       </form>
 
-      {message && <p style={{ marginTop: 20 }}>{message}</p>}
+      {message && (
+        <p className="mt-4 text-center text-gray-700">{message}</p>
+      )}
     </div>
   )
 }

@@ -1,28 +1,28 @@
 import { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
-import "../style.css"
+import "../style.css";
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../../assets/logoHorizontal.png";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function DrinksPreferencesScreen() {
+export default function PartyPreferencesScreen() {
+  const options = [
+    "Banda ao vivo",
+    "DJ",
+    "Música ambiente tranquila",
+    "Playlist personalizada",
+    "Outro"
+  ]
+
   const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
-  const options = [
-    "Bebidas não alcoólicas",
-    "Bebidas alcoólicas",
-    "Open bar completo",
-    "Bar de drinks personalizados",
-    "Outro",
-  ]
-
-  const toggleOption = (option) => {
+  const handleToggle = (option) => {
     if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((item) => item !== option))
+      setSelectedOptions(selectedOptions.filter((o) => o !== option))
     } else {
       setSelectedOptions([...selectedOptions, option])
     }
@@ -34,11 +34,11 @@ export default function DrinksPreferencesScreen() {
     setMessage(null)
 
     try {
-      // 1. Pega usuário logado
+      // 1. pega o usuário logado
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // 2. Busca casamento
+      // 2. busca o casamento vinculado a esse usuário
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -50,18 +50,18 @@ export default function DrinksPreferencesScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // 3a. Atualiza preferências se já existir
+        // 3a. se já existe, atualiza
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ bebidas: selectedOptions })
+          .update({ musica_festa: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // 3b. Cria preferências se ainda não existir
+        // 3b. se não existe, cria e vincula ao casamento
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ bebidas: selectedOptions }])
+          .insert([{ musica_festa: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -69,7 +69,7 @@ export default function DrinksPreferencesScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
-        // Vincula ao casamento
+        // vincula a nova preferência ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -78,10 +78,10 @@ export default function DrinksPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de bebidas salvas com sucesso!")
+      setMessage("✅ Preferências de festa salvas com sucesso!")
 
-      // 🔹 Redireciona para a próxima tela
-      navigate("/set/preferences/extra-services")
+      // 🔹 redireciona para próxima tela
+      navigate("/set/preferences/gastronomy-type")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -92,24 +92,19 @@ export default function DrinksPreferencesScreen() {
 
   return (
     <div className="tela">
-      <h2>
-        E quanto às bebidas, o que gostaria de fazer?
-      </h2>
-
+      <h2>Como gostariam que fosse a alma da festa?</h2>
       <form onSubmit={handleSubmit}>
         {options.map((option) => (
-          <label
-            key={option}
-            className="labelCheckbox"
-          >
-            <input
-              type="checkbox"
-              checked={selectedOptions.includes(option)}
-              onChange={() => toggleOption(option)}
-              className="checkbox"
-            />
-            <span>{option}</span>
-          </label>
+          <div key={option}>
+            <label className="labelCheckbox">
+              <input className="checkbox"
+                type="checkbox"
+                checked={selectedOptions.includes(option)}
+                onChange={() => handleToggle(option)}
+              />
+              {" "}{option}
+            </label>
+          </div>
         ))}
 
         <button
@@ -121,7 +116,7 @@ export default function DrinksPreferencesScreen() {
         </button>
       </form>
 
-      {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
+      {message && <p style={{ marginTop: 20 }}>{message}</p>}
     </div>
   )
 }

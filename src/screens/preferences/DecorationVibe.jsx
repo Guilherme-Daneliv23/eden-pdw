@@ -1,27 +1,27 @@
-import { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import React, { useState } from "react"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
-import "../style.css"
+import "../style.css";
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../../assets/logoHorizontal.png";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function GiftPreferenceScreen() {
+export default function DecorationVibePreferenceScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
-
+    
   const options = [
-    "Comestível",
-    "Utilitária",
-    "Decorativa",
-    "Plantinha",
-    "Sem lembrancinha",
+    "Aconchegante",
+    "Instagramável",
+    "História do casal",
+    "Floral abundante",
+    "Estilo minimalista",
     "Outro",
   ]
 
-  const toggleOption = (option) => {
+  const handleSelect = (option) => {
     if (selectedOptions.includes(option)) {
       setSelectedOptions(selectedOptions.filter((item) => item !== option))
     } else {
@@ -35,11 +35,11 @@ export default function GiftPreferenceScreen() {
     setMessage(null)
 
     try {
-      // 1. pega o usuário logado
+      // 1. pega usuário logado
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // 2. busca casamento desse usuário
+      // 2. busca casamento do usuário
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -51,18 +51,18 @@ export default function GiftPreferenceScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // 3a. Atualiza preferências se já existir
+        // 3a. atualiza se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ lembranca: selectedOptions })
+          .update({ decoracao: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // 3b. Cria preferências se ainda não existir
+        // 3b. cria se ainda não existir
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ lembranca: selectedOptions }])
+          .insert([{ decoracao: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -70,7 +70,7 @@ export default function GiftPreferenceScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
-        // Vincula ao casamento
+        // vincula ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -79,10 +79,10 @@ export default function GiftPreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferência de lembrancinhas salva com sucesso!")
+      setMessage("✅ Preferência de decoração salva com sucesso!")
 
-      // 🔹 Redireciona para próxima tela
-      navigate("/set/preferences/first-priority")
+      // 🔹 redireciona para convites
+      navigate("/set/preferences/invitation")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -94,19 +94,18 @@ export default function GiftPreferenceScreen() {
   return (
     <div className="tela">
       <h2>
-        Que tipo de lembrancinha seus convidados terão desse dia?
+        Qual a vibe de vocês para a decoração do casamento?
       </h2>
-
       <form onSubmit={handleSubmit}>
-        {options.map((option) => (
+        {options.map((option, index) => (
           <label
-            key={option}
+            key={index}
             className="labelCheckbox"
           >
             <input
               type="checkbox"
               checked={selectedOptions.includes(option)}
-              onChange={() => toggleOption(option)}
+              onChange={() => handleSelect(option)}
               className="checkbox"
             />
             <span>{option}</span>
@@ -123,7 +122,7 @@ export default function GiftPreferenceScreen() {
       </form>
 
       {message && (
-        <p className="mt-4 text-center text-gray-700">{message}</p>
+        <p className="mt-4 text-center text-[#A94F1A] font-medium">{message}</p>
       )}
     </div>
   )

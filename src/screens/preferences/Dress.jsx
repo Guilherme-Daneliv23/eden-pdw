@@ -1,28 +1,33 @@
 import { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 import "../style.css"
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../../assets/logoHorizontal.png";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function InvestmentPriorityPreferenceScreen() {
-  const [selectedOption, setSelectedOption] = useState("")
+export default function DressPreferencesScreen() {
+  const options = [
+    "Princesa",
+    "Sereia",
+    "Curto",
+    "Mid",
+    "Minimalista",
+    "Boho",
+    "Feito sob medida",
+  ]
+
+  const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
-  const options = [
-    "Festa",
-    "Recepção",
-    "Cerimônia",
-    "Fotografia",
-    "Vestuário",
-    "Outro",
-  ]
-
-  const handleSelect = (option) => {
-    setSelectedOption(option) // apenas um selecionado
+  const handleToggle = (option) => {
+    if (selectedOptions.includes(option)) {
+      setSelectedOptions(selectedOptions.filter((o) => o !== option))
+    } else {
+      setSelectedOptions([...selectedOptions, option])
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -31,11 +36,10 @@ export default function InvestmentPriorityPreferenceScreen() {
     setMessage(null)
 
     try {
-      // 1. Pega usuário logado
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // 2. Busca casamento
+      // busca casamento do usuário
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -47,18 +51,18 @@ export default function InvestmentPriorityPreferenceScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // 3a. Atualiza
+        // já existe → atualiza
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ investimento_prioridade: selectedOption })
+          .update({ vestido: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // 3b. Cria e vincula
+        // não existe → cria
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ investimento_prioridade: selectedOption }])
+          .insert([{ vestido: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -66,6 +70,7 @@ export default function InvestmentPriorityPreferenceScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
+        // vincula ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -74,10 +79,10 @@ export default function InvestmentPriorityPreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Prioridade de investimento salva com sucesso!")
+      setMessage("✅ Preferências de vestido salvas com sucesso!")
 
-      // 🔹 Redireciona para a próxima tela
-      navigate("/set/preferences/drinks")
+      // 🔹 redireciona para próxima tela
+      navigate("/set/preferences/party")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -88,42 +93,32 @@ export default function InvestmentPriorityPreferenceScreen() {
 
   return (
     <div className="tela">
-      <h2>
-        O maior investimento será em qual parte?
-      </h2>
-
-      <form onSubmit={handleSubmit} className="space-y-3">
+      <h2>Para você, como seria “O vestido ideal”?</h2>
+      <form onSubmit={handleSubmit}>
         {options.map((option) => (
-          <label
-            key={option}
-            className={`flex items-center px-4 py-3 rounded-xl border cursor-pointer ${
-              selectedOption === option
-                ? "bg-pink-500 text-white border-pink-500"
-                : "bg-gray-100 text-gray-700 border-gray-300"
-            }`}
-          >
-            <input
-              type="radio"
-              name="investment"
-              value={option}
-              checked={selectedOption === option}
-              onChange={() => handleSelect(option)}
-              className="hidden"
-            />
-            {option}
-          </label>
+          <div key={option} style={{ marginBottom: 8 }}>
+            <label className="labelCheckbox">
+              <input
+                type="checkbox"
+                checked={selectedOptions.includes(option)}
+                onChange={() => handleToggle(option)}
+                className="checkbox"
+              />
+              {" "}{option}
+            </label>
+          </div>
         ))}
 
         <button
           type="submit"
-          disabled={loading || !selectedOption}
+          disabled={loading}
           className="btn btnBg"
         >
-          {loading ? "Salvando..." : "Salvar investimento"}
+          {loading ? "Salvando..." : "Salvar preferências"}
         </button>
       </form>
 
-      {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
+      {message && <p style={{ marginTop: 20 }}>{message}</p>}
     </div>
   )
 }

@@ -1,22 +1,24 @@
 import { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 import "../style.css"
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../../assets/logoHorizontal.png";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function ExtraServicesPreferencesScreen() {
+export default function GastronomyMainOptionsPreferencesScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
   const options = [
-    "Espaço kids",
-    "Flash tattoo",
-    "Carro especial para os noivos",
-    "Cabine de foto 360°",
+    "Massas",
+    "Churrasco",
+    "Frutos do mar",
+    "Opções vegetarianas",
+    "Opções veganas",
+    "Comida regional típica",
     "Outro",
   ]
 
@@ -50,18 +52,18 @@ export default function ExtraServicesPreferencesScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // 3a. Atualiza preferências
+        // Atualiza se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ servicos_extra: selectedOptions })
+          .update({ gastronomia_opcao_principal: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // 3b. Cria novas preferências e vincula
+        // Cria se ainda não existir
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ servicos_extra: selectedOptions }])
+          .insert([{ gastronomia_opcao_principal: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -69,6 +71,7 @@ export default function ExtraServicesPreferencesScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
+        // vincula ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -77,10 +80,10 @@ export default function ExtraServicesPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de serviços extras salvas com sucesso!")
+      setMessage("✅ Opções principais de gastronomia salvas com sucesso!")
 
-      // 🔹 Redireciona para a próxima tela
-      navigate("/set/preferences/dreams-ideas")
+      // 🔹 Redireciona para próxima tela
+      navigate("/set/preferences/gastronomy-cake")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -91,34 +94,36 @@ export default function ExtraServicesPreferencesScreen() {
 
   return (
     <div className="tela">
-      <h2>
-        Gostaria de ter algum serviço extra?
-      </h2>
+      <div>
+        <h2>
+          O que não pode faltar no cardápio?
+        </h2>
 
-      <form onSubmit={handleSubmit}>
-        {options.map((option) => (
-          <label key={option} className="labelCheckbox">
-            <input
-              type="checkbox"
-              checked={selectedOptions.includes(option)}
-              onChange={() => toggleOption(option)}
-              className="checkbox"
-            />
-            <span>{option}</span>
-          </label>
-        ))}
+        <form onSubmit={handleSubmit}>
+          {options.map((option) => (
+            <label key={option} className="labelCheckbox">
+              <input
+                type="checkbox"
+                checked={selectedOptions.includes(option)}
+                onChange={() => toggleOption(option)}
+                className="checkbox"
+              />
+              <span>{option}</span>
+            </label>
+          ))}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btnBg"
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btnBg"
+          >
+            {loading ? "Salvando..." : "Continuar"}
+          </button>
+        </form>
+      </div>
 
       {message && (
-        <p className="mt-4 text-center text-gray-700">{message}</p>
+        <p className="mt-4 text-center text-[#A94F1A]">{message}</p>
       )}
     </div>
   )

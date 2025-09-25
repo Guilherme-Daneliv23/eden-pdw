@@ -1,33 +1,16 @@
 import { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 import "../style.css"
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../../assets/logoHorizontal.png";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function GastronomyTypePreferenceScreen() {
-  const [selectedOptions, setSelectedOptions] = useState([])
+export default function DreamsIdeasPreferenceScreen() {
+  const [dream, setDream] = useState("")
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
-
-  const options = [
-    "Buffet (Tradicional)",
-    "Jantar à mesa",
-    "Finger foods",
-    "Coquetel volante",
-    "Food trucks",
-    "Outro",
-  ]
-
-  const toggleOption = (option) => {
-    if (selectedOptions.includes(option)) {
-      setSelectedOptions(selectedOptions.filter((item) => item !== option))
-    } else {
-      setSelectedOptions([...selectedOptions, option])
-    }
-  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -39,7 +22,7 @@ export default function GastronomyTypePreferenceScreen() {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // 2. busca casamento desse usuário
+      // 2. busca casamento do usuário
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -54,15 +37,15 @@ export default function GastronomyTypePreferenceScreen() {
         // Atualiza se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ gastronomia_tipo: selectedOptions })
+          .update({ sonhos_ideias: dream })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // Cria se não existir
+        // Cria se ainda não existir
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ gastronomia_tipo: selectedOptions }])
+          .insert([{ sonhos_ideias: dream }])
           .select("id_preferencias")
           .single()
 
@@ -70,7 +53,7 @@ export default function GastronomyTypePreferenceScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
-        // Vincula ao casamento
+        // vincula ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -79,10 +62,10 @@ export default function GastronomyTypePreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de gastronomia salvas com sucesso!")
+      setMessage("✅ Sonho/ideia salvo com sucesso!")
 
-      // 🔹 Redireciona para próxima tela
-      navigate("/set/preferences/gastronomy-main-options")
+      // 🔹 Redireciona para home
+      navigate("/home")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -95,28 +78,24 @@ export default function GastronomyTypePreferenceScreen() {
     <div className="tela">
       <div>
         <h2>
-          Qual a melhor maneira de aproveitar uma boa comida?
+          Nos conte, existe algo que você sonhou e não encontrou aqui?
         </h2>
 
-        <form onSubmit={handleSubmit}>
-          {options.map((option) => (
-            <label key={option} className="labelCheckbox">
-              <input
-                type="checkbox"
-                checked={selectedOptions.includes(option)}
-                onChange={() => toggleOption(option)}
-                className="checkbox"
-              />
-              <span>{option}</span>
-            </label>
-          ))}
+        <form onSubmit={handleSubmit} className="space-y-3 w-full max-w-sm mx-auto">
+          <textarea
+            placeholder="Nos diga seu sonho!"
+            value={dream}
+            onChange={(e) => setDream(e.target.value)}
+            className="w-full h-24 p-3 rounded-xl border-2 border-[#A94F1A] text-[#A94F1A] focus:outline-none focus:ring-2 focus:ring-[#A94F1A]"
+            required
+          />
 
           <button
             type="submit"
             disabled={loading}
             className="btn btnBg"
           >
-            {loading ? "Salvando..." : "Continuar"}
+            {loading ? "Salvando..." : "Finalizar"}
           </button>
         </form>
       </div>

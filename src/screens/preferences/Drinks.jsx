@@ -1,23 +1,22 @@
 import { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 import "../style.css"
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../../assets/logoHorizontal.png";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function GastronomyCakePreferencesScreen() {
+export default function DrinksPreferencesScreen() {
   const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
 
   const options = [
-    "Chocolate",
-    "Ninho com Nutella",
-    "Frutas",
-    "Doce de leite",
-    "Red Velvet",
+    "Bebidas não alcoólicas",
+    "Bebidas alcoólicas",
+    "Open bar completo",
+    "Bar de drinks personalizados",
     "Outro",
   ]
 
@@ -35,11 +34,11 @@ export default function GastronomyCakePreferencesScreen() {
     setMessage(null)
 
     try {
-      // 1. pega usuário logado
+      // 1. Pega usuário logado
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) throw new Error("Usuário não autenticado")
 
-      // 2. busca casamento do usuário
+      // 2. Busca casamento
       const { data: casamento, error: casamentoError } = await supabase
         .from("casamento")
         .select("id_casamento, id_preferencias")
@@ -51,18 +50,18 @@ export default function GastronomyCakePreferencesScreen() {
       let idPreferencias = casamento.id_preferencias
 
       if (idPreferencias) {
-        // Atualiza se já existir
+        // 3a. Atualiza preferências se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ gastronomia_bolo: selectedOptions })
+          .update({ bebidas: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
       } else {
-        // Cria se ainda não existir
+        // 3b. Cria preferências se ainda não existir
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ gastronomia_bolo: selectedOptions }])
+          .insert([{ bebidas: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -70,7 +69,7 @@ export default function GastronomyCakePreferencesScreen() {
 
         idPreferencias = novaPref.id_preferencias
 
-        // vincula ao casamento
+        // Vincula ao casamento
         const { error: linkError } = await supabase
           .from("casamento")
           .update({ id_preferencias: idPreferencias })
@@ -79,10 +78,10 @@ export default function GastronomyCakePreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de bolo salvas com sucesso!")
+      setMessage("✅ Preferências de bebidas salvas com sucesso!")
 
-      // 🔹 Redireciona para próxima tela
-      navigate("/set/preferences/dream-scenario")
+      // 🔹 Redireciona para a próxima tela
+      navigate("/set/preferences/extra-services")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -93,37 +92,36 @@ export default function GastronomyCakePreferencesScreen() {
 
   return (
     <div className="tela">
-      <div>
-        <h2>
-          Os favoritos para o sabor do bolo
-        </h2>
+      <h2>
+        E quanto às bebidas, o que gostaria de fazer?
+      </h2>
 
-        <form onSubmit={handleSubmit}>
-          {options.map((option) => (
-            <label key={option} className="labelCheckbox">
-              <input
-                type="checkbox"
-                checked={selectedOptions.includes(option)}
-                onChange={() => toggleOption(option)}
-                className="checkbox"
-              />
-              <span>{option}</span>
-            </label>
-          ))}
-
-          <button
-            type="submit"
-            disabled={loading}
-            className="btn btnBg"
+      <form onSubmit={handleSubmit}>
+        {options.map((option) => (
+          <label
+            key={option}
+            className="labelCheckbox"
           >
-            {loading ? "Salvando..." : "Continuar"}
-          </button>
-        </form>
-      </div>
+            <input
+              type="checkbox"
+              checked={selectedOptions.includes(option)}
+              onChange={() => toggleOption(option)}
+              className="checkbox"
+            />
+            <span>{option}</span>
+          </label>
+        ))}
 
-      {message && (
-        <p className="mt-4 text-center text-[#A94F1A]">{message}</p>
-      )}
+        <button
+          type="submit"
+          disabled={loading}
+          className="btn btnBg"
+        >
+          {loading ? "Salvando..." : "Salvar preferências"}
+        </button>
+      </form>
+
+      {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
     </div>
   )
 }

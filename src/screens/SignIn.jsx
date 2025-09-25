@@ -1,10 +1,10 @@
 import { useState } from "react"
-import { supabase } from "../../services/supabaseClient"
+import { supabase } from "../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
-import "../style.css"
+import "./style.css"
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../assets/logoHorizontal.png"; 
+import logoHorizontal from "../assets/logoHorizontal.png"; 
 
 export default function SignInScreen() {
   const [email, setEmail] = useState("")

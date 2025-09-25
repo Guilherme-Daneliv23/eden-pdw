@@ -1,16 +1,33 @@
 import { useState } from "react"
-import { supabase } from "../../../services/supabaseClient"
+import { supabase } from "../../services/supabaseClient"
 import { useNavigate } from "react-router-dom"
 import "../style.css"
 import "@fontsource/roboto";
 import "@fontsource/roboto/700.css";
-import logoHorizontal from "../../../assets/logoHorizontal.png";
+import logoHorizontal from "../../assets/logoHorizontal.png";
 
-export default function DreamsIdeasPreferenceScreen() {
-  const [dream, setDream] = useState("")
+export default function GastronomyCakePreferencesScreen() {
+  const [selectedOptions, setSelectedOptions] = useState([])
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState(null)
   const navigate = useNavigate()
+
+  const options = [
+    "Chocolate",
+    "Ninho com Nutella",
+    "Frutas",
+    "Doce de leite",
+    "Red Velvet",
+    "Outro",
+  ]
+
+  const toggleOption = (option) => {
+    if (selectedOptions.includes(option)) {
+      setSelectedOptions(selectedOptions.filter((item) => item !== option))
+    } else {
+      setSelectedOptions([...selectedOptions, option])
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -37,7 +54,7 @@ export default function DreamsIdeasPreferenceScreen() {
         // Atualiza se já existir
         const { error: updateError } = await supabase
           .from("preferencias")
-          .update({ sonhos_ideias: dream })
+          .update({ gastronomia_bolo: selectedOptions })
           .eq("id_preferencias", idPreferencias)
 
         if (updateError) throw updateError
@@ -45,7 +62,7 @@ export default function DreamsIdeasPreferenceScreen() {
         // Cria se ainda não existir
         const { data: novaPref, error: insertError } = await supabase
           .from("preferencias")
-          .insert([{ sonhos_ideias: dream }])
+          .insert([{ gastronomia_bolo: selectedOptions }])
           .select("id_preferencias")
           .single()
 
@@ -62,10 +79,10 @@ export default function DreamsIdeasPreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Sonho/ideia salvo com sucesso!")
+      setMessage("✅ Preferências de bolo salvas com sucesso!")
 
-      // 🔹 Redireciona para home
-      navigate("/home")
+      // 🔹 Redireciona para próxima tela
+      navigate("/set/preferences/dream-scenario")
 
     } catch (err) {
       setMessage("Erro: " + err.message)
@@ -78,24 +95,28 @@ export default function DreamsIdeasPreferenceScreen() {
     <div className="tela">
       <div>
         <h2>
-          Nos conte, existe algo que você sonhou e não encontrou aqui?
+          Os favoritos para o sabor do bolo
         </h2>
 
-        <form onSubmit={handleSubmit} className="space-y-3 w-full max-w-sm mx-auto">
-          <textarea
-            placeholder="Nos diga seu sonho!"
-            value={dream}
-            onChange={(e) => setDream(e.target.value)}
-            className="w-full h-24 p-3 rounded-xl border-2 border-[#A94F1A] text-[#A94F1A] focus:outline-none focus:ring-2 focus:ring-[#A94F1A]"
-            required
-          />
+        <form onSubmit={handleSubmit}>
+          {options.map((option) => (
+            <label key={option} className="labelCheckbox">
+              <input
+                type="checkbox"
+                checked={selectedOptions.includes(option)}
+                onChange={() => toggleOption(option)}
+                className="checkbox"
+              />
+              <span>{option}</span>
+            </label>
+          ))}
 
           <button
             type="submit"
             disabled={loading}
             className="btn btnBg"
           >
-            {loading ? "Salvando..." : "Finalizar"}
+            {loading ? "Salvando..." : "Continuar"}
           </button>
         </form>
       </div>
