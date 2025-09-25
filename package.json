@@ -13,7 +13,6 @@
   "dependencies": {
     "@fontsource/roboto": "^5.2.8",
     "@supabase/supabase-js": "^2.57.4",
-    "@tailwindcss/vite": "^4.1.13",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
@@ -21,6 +20,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.35.0",
+    "@tailwindcss/vite": "^4.1.13",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.2",
