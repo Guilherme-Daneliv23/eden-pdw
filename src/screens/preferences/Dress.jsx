@@ -99,17 +99,17 @@ export default function DressPreferencesScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">        
-        <h2>Para você, como seria “O vestido ideal”?</h2>
+      <div className="area">        
+        <h3 className="w-70">Para você, como seria “O vestido ideal”?</h3>
         <form onSubmit={handleSubmit}>
           {options.map((option) => (
-            <div key={option} style={{ marginBottom: 8 }}>
+            <div key={option}>
               <label className="labelCheckbox">
                 <input
+                  className="checkbox"
                   type="checkbox"
                   checked={selectedOptions.includes(option)}
                   onChange={() => handleToggle(option)}
-                  className="checkbox"
                 />
                 {" "}{option}
               </label>

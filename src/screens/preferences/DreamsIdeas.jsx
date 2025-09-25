@@ -82,17 +82,15 @@ export default function DreamsIdeasPreferenceScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">
-        <h2>
-          Nos conte, existe algo que você sonhou e não encontrou aqui?
-        </h2>
+      <div className="area">
+        <h3 className="w-65">Nos conte, existe algo que você sonhou e não encontrou aqui?</h3>
 
         <form onSubmit={handleSubmit} className="space-y-3 w-full max-w-sm mx-auto">
           <textarea
             placeholder="Nos diga seu sonho!"
             value={dream}
             onChange={(e) => setDream(e.target.value)}
-            className="w-full h-24 p-3 rounded-xl border-2 border-[#A94F1A] text-[#A94F1A] focus:outline-none focus:ring-2 focus:ring-[#A94F1A]"
+            className="w-full h-24 p-3 rounded-xl border-2 border-rosa-escuro text-rosa-escuro focus:outline-none focus:border-amarelo-escuro focus:text-amarelo-escuro"
             required
           />
 

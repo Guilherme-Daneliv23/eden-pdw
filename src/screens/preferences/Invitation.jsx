@@ -92,10 +92,8 @@ export default function InvitationPreferenceScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">        
-        <h2>
-          Como querem enviar esse convite tão especial?
-        </h2>
+      <div className="area">        
+        <h3>Como querem enviar esse convite tão especial?</h3>
 
         <form onSubmit={handleSubmit}>
           {options.map((option, index) => (

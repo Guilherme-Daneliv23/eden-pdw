@@ -23,7 +23,7 @@ export default function SignInScreen() {
       password,
     })
 
-    if (error) {
+    if(error) {
       setMessage("Erro: " + error.message)
     } else {
       setMessage("Login realizado com sucesso!")
@@ -40,12 +40,13 @@ export default function SignInScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
       
-      <div className="areaForms">
+      <div className="area areaLoginCadastro">
         <h2>Que bom vê-los,<br/>noivos!</h2>
 
         <form onSubmit={handleLogin}>
           <div className="inputBox">
             <input 
+              className="inputText"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -56,7 +57,8 @@ export default function SignInScreen() {
           </div>
 
           <div className="inputBox">
-            <input 
+            <input
+              className="inputText"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

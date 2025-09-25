@@ -98,10 +98,8 @@ export default function DrinksPreferencesScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">        
-        <h2>
-          E quanto às bebidas, o que gostaria de fazer?
-        </h2>
+      <div className="area">        
+        <h3>E quanto às bebidas, o que gostaria de fazer?</h3>
 
         <form onSubmit={handleSubmit}>
           {options.map((option) => (

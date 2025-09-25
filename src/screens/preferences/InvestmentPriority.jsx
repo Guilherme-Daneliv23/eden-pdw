@@ -94,10 +94,8 @@ export default function InvestmentPriorityPreferenceScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">        
-        <h2>
-          O maior investimento será em qual parte?
-        </h2>
+      <div className="area">        
+        <h3>O maior investimento será em qual parte?</h3>
 
         <form onSubmit={handleSubmit} className="space-y-3">
           {options.map((option) => (
@@ -105,8 +103,8 @@ export default function InvestmentPriorityPreferenceScreen() {
               key={option}
               className={`flex items-center px-4 py-3 rounded-xl border cursor-pointer ${
                 selectedOption === option
-                  ? "bg-pink-500 text-white border-pink-500"
-                  : "bg-gray-100 text-gray-700 border-gray-300"
+                  ? "bg-rosa-escuro-50"
+                  : "bg-rosa-claro"
               }`}
             >
               <input

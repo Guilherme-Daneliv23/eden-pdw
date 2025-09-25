@@ -100,8 +100,8 @@ export default function DreamScenarioPreferencesScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">        
-        <h2>Qual seria o cenário dos seus sonhos?</h2>
+      <div className="area">        
+        <h3>Qual seria o cenário dos seus sonhos?</h3>
         <form onSubmit={handleSubmit}>
           {options.map((option) => (
             <div key={option}>

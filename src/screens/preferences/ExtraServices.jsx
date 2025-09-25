@@ -97,10 +97,8 @@ export default function ExtraServicesPreferencesScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">        
-        <h2>
-          Gostaria de ter algum serviço extra?
-        </h2>
+      <div className="area">        
+        <h3>Gostaria de ter algum serviço extra?</h3>
 
         <form onSubmit={handleSubmit}>
           {options.map((option) => (

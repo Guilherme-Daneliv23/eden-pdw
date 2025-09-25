@@ -65,12 +65,13 @@ export default function SignUpScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">
+      <div className="area areaLoginCadastro">
         <h2>Bem-vindos,<br/>noivos!</h2>
 
         <form onSubmit={handleSignUp}>
           <div className="inputBox">
             <input
+              className="inputText"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -82,6 +83,7 @@ export default function SignUpScreen() {
 
           <div className="inputBox">
             <input
+              className="inputText"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}

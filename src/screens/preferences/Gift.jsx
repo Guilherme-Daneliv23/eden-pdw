@@ -99,10 +99,8 @@ export default function GiftPreferenceScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">        
-        <h2>
-          Que tipo de lembrancinha seus convidados terão desse dia?
-        </h2>
+      <div className="area">        
+        <h3>Como será a lembrancinha desse dia tão especial?</h3>
 
         <form onSubmit={handleSubmit}>
           {options.map((option) => (

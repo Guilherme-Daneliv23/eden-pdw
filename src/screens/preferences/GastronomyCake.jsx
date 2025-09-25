@@ -99,10 +99,8 @@ export default function GastronomyCakePreferencesScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">
-        <h2>
-          Os favoritos para o sabor do bolo
-        </h2>
+      <div className="area">
+        <h3 className="w-65">Os favoritos para o sabor do bolo</h3>
 
         <form onSubmit={handleSubmit}>
           {options.map((option) => (

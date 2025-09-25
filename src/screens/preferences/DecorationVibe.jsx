@@ -99,10 +99,8 @@ export default function DecorationVibePreferenceScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">        
-        <h2>
-          Qual a vibe de vocês para a decoração do casamento?
-        </h2>
+      <div className="area">        
+        <h3>Qual a vibe de vocês para a decoração do casamento?</h3>
         <form onSubmit={handleSubmit}>
           {options.map((option, index) => (
             <label

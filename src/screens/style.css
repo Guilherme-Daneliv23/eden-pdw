@@ -31,8 +31,14 @@ h2 {
 
 h3 {
     text-align: center;
-    margin-bottom: 10px;
     font-weight: bold;
+    font-size: 25px;
+    margin: 40px 0;
+}
+
+h4 {
+    font-weight: bold;
+    margin-left: 10px;
 }
 
 .tela {
@@ -53,12 +59,15 @@ h3 {
     top: 15px;
 }
 
-.areaForms {
+.area {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 320px;
+}
+
+.areaLoginCadastro {
     justify-content: center;
-    width: 360px;
     height: 80vh;
 }
 
@@ -77,11 +86,11 @@ label {
 
 .labelCheckbox {
     display: flex;
-    align-items: center;
     font-size: 15px;
-    margin-bottom: 10px;
+    margin: 0;
     cursor: pointer;
     top: -10px;
+    margin-bottom: 10px;
 }
 
 input {
@@ -89,9 +98,12 @@ input {
     border-radius: 15px;
     width: 325px;
     padding: 15px;
+    color: var(--color-rosa-escuro);
+    outline: none;
+}
+
+.inputText {
     margin-bottom: 15px;
-    color: var(--color-amarelo-escuro);
-    outline-color: 1px solid var(--color-rosa-escuro);
 }
 
 .inputBox {
@@ -122,13 +134,24 @@ input {
     font-size: 12px;
 }
 
-.inputBox input:focus + label {
+input:focus {
+    color: var(--color-amarelo-escuro);
+    transition: 0.2s ease all;
+    border-color: 1px var(--color-amarelo-escuro);
+}
+
+input:focus + label {
     color: var(--color-amarelo-escuro);
 }
 
 input:-webkit-autofill {
     -webkit-box-shadow: var(--color-rosa-escuro);
     -webkit-text-fill-color: var(--color-amarelo-escuro);
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    filter: invert(46%) sepia(32%) saturate(1496%) hue-rotate(339deg) brightness(92%) contrast(91%);
 }
 
 .checkbox {
@@ -144,11 +167,15 @@ button {
 }
 
 .btn {
-    width: 325px;
+    width: 320px;
     border-radius: 20px;
     padding: 10px;
     margin-bottom: 10px;
     transition: 0.18s ease all;
+}
+
+.btn:active {
+    transform: scale(0.98);
 }
 
 .btnBg {

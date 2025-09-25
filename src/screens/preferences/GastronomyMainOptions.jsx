@@ -100,10 +100,8 @@ export default function GastronomyMainOptionsPreferencesScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">
-        <h2>
-          O que não pode faltar no cardápio?
-        </h2>
+      <div className="area">
+        <h3 className="w-65">O que não pode faltar no cardápio?</h3>
 
         <form onSubmit={handleSubmit}>
           {options.map((option) => (

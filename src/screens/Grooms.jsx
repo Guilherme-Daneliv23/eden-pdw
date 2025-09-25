@@ -92,12 +92,13 @@ export default function GroomsScreen() {
       </select>
 
       <div className="areaForms">
-        <h2>Cadastro dos Noivos</h2>
+        <h3>Cadastro dos Noivos</h3>
         <form className="forms" onSubmit={handleSubmit}>
           {[noivo1, noivo2].map((noivo, index) => (
             <div key={index}>
-              <h3>Noivo {index + 1}</h3>
+              <h4>Noivo {index + 1}</h4>
               <input
+                className="inputText"
                 type="text"
                 placeholder="Nome"
                 value={noivo.nome}
@@ -105,6 +106,7 @@ export default function GroomsScreen() {
                 required
               />
               <input
+                className="inputText"
                 type="text"
                 placeholder="Sobrenome"
                 value={noivo.sobrenome}
@@ -112,6 +114,7 @@ export default function GroomsScreen() {
                 required
               />
               <input
+                className="inputText"
                 type="text"
                 placeholder="Idade"
                 value={noivo.idade}
@@ -119,6 +122,7 @@ export default function GroomsScreen() {
                 required
               />
               <input
+                className="inputText"
                 type="text"
                 placeholder="Sexo"
                 value={noivo.sexo}
