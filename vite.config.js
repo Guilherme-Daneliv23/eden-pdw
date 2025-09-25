@@ -28,5 +28,5 @@ export default defineConfig({
       }
     })
   ],
-  base: '/eden-pdw/login' // <- descomente e ajuste se usar GitHub Pages
+  base: '/eden-pdw/' // <- descomente e ajuste se usar GitHub Pages
 })

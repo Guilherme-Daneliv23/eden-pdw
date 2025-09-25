@@ -65,7 +65,7 @@ export default function DreamsIdeasPreferenceScreen() {
       setMessage("✅ Sonho/ideia salvo com sucesso!")
 
       // 🔹 Redireciona para home
-      navigate("/")
+      navigate("/home")
 
     } catch (err) {
       setMessage("Erro: " + err.message)

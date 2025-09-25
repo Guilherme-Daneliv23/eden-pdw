@@ -22,9 +22,9 @@ export default function App() {
   return (
     <BrowserRouter  basename="/eden-pdw">
       <Routes>
-        <Route path="/" element={<h1>Home vazia</h1>} />
+        <Route path="/home" element={<h1>Home vazia</h1>} />
         <Route path="/signup" element={<SignUpScreen />} />
-        <Route path="/login" element={<SignInScreen />} />
+        <Route path="/" element={<SignInScreen />} />
         <Route path="/set/general-data-wedding" element={<GeneralDataWeddingScreen />} />
         <Route path="/set/preferences/dress" element={<DressPreferencesScreen />} />
         <Route path="/set/preferences/party" element={<PartyPreferencesScreen />} />
