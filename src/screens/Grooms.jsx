@@ -91,7 +91,7 @@ export default function GroomsScreen() {
         <option value="idioma1">Português (Brasil)</option>
       </select>
 
-      <div className="areaForms">
+      <div className="area">
         <h3>Cadastro dos Noivos</h3>
         <form className="forms" onSubmit={handleSubmit}>
           {[noivo1, noivo2].map((noivo, index) => (

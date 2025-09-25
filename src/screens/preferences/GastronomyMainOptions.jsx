@@ -125,6 +125,7 @@ export default function GastronomyMainOptionsPreferencesScreen() {
           </button>
         </form>
       </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && (
         <p className="mt-4 text-center text-[#A94F1A]">{message}</p>
