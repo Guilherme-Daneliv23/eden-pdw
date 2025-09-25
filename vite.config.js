@@ -13,8 +13,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['logoApp'],
       manifest: {
-        name: 'Gestão de Casamentos',
-        short_name: 'Eden',
+        name: 'Éden',
+        short_name: 'Éden',
         description: 'Éden, o gestor do casamento dos seus sonhos!',
         start_url: '.',
         scope: '.',
