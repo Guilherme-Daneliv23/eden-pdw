@@ -14,7 +14,7 @@ export default defineConfig({
       includeAssets: ['logoApp'],
       manifest: {
         name: 'Gestão de Casamentos',
-        short_name: 'Casamentos',
+        short_name: 'Eden',
         description: 'Éden, o gestor do casamento dos seus sonhos!',
         start_url: '.',
         scope: '.',
