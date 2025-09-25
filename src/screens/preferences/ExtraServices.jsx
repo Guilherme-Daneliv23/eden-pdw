@@ -77,7 +77,7 @@ export default function ExtraServicesPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de serviços extras salvas com sucesso!")
+      setMessage("Preferências de serviços extras salvas com sucesso!")
 
       // 🔹 Redireciona para a próxima tela
       navigate("/set/preferences/dreams-ideas")
@@ -91,31 +91,40 @@ export default function ExtraServicesPreferencesScreen() {
 
   return (
     <div className="tela">
-      <h2>
-        Gostaria de ter algum serviço extra?
-      </h2>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
 
-      <form onSubmit={handleSubmit}>
-        {options.map((option) => (
-          <label key={option} className="labelCheckbox">
-            <input
-              type="checkbox"
-              checked={selectedOptions.includes(option)}
-              onChange={() => toggleOption(option)}
-              className="checkbox"
-            />
-            <span>{option}</span>
-          </label>
-        ))}
+      <div className="areaForms">        
+        <h2>
+          Gostaria de ter algum serviço extra?
+        </h2>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btnBg"
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
+        <form onSubmit={handleSubmit}>
+          {options.map((option) => (
+            <label key={option} className="labelCheckbox">
+              <input
+                type="checkbox"
+                checked={selectedOptions.includes(option)}
+                onChange={() => toggleOption(option)}
+                className="checkbox"
+              />
+              <span>{option}</span>
+            </label>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btnBg"
+          >
+            {loading ? "Salvando..." : "Salvar preferências"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && (
         <p className="mt-4 text-center text-gray-700">{message}</p>

@@ -72,7 +72,7 @@ export default function InvitationPreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de convite salvas com sucesso!")
+      setMessage("Preferências de convite salvas com sucesso!")
 
       // 🔹 Redireciona para a tela de lembrancinhas
       navigate("/set/preferences/gift")
@@ -86,30 +86,39 @@ export default function InvitationPreferenceScreen() {
 
   return (
     <div className="tela">
-      <h2>
-        Como querem enviar esse convite tão especial?
-      </h2>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
 
-      <form onSubmit={handleSubmit}>
-        {options.map((option, index) => (
-          <label key={index} className="labelCheckbox">
-            <input className="checkbox"
-              type="checkbox"
-              checked={selectedOptions.includes(option)}
-              onChange={() => handleSelect(option)}
-            />
-            <span>{option}</span>
-          </label>
-        ))}
+      <div className="areaForms">        
+        <h2>
+          Como querem enviar esse convite tão especial?
+        </h2>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btnBg"
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
+        <form onSubmit={handleSubmit}>
+          {options.map((option, index) => (
+            <label key={index} className="labelCheckbox">
+              <input className="checkbox"
+                type="checkbox"
+                checked={selectedOptions.includes(option)}
+                onChange={() => handleSelect(option)}
+              />
+              <span>{option}</span>
+            </label>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btnBg"
+          >
+            {loading ? "Salvando..." : "Salvar preferências"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && (
         <p className="mt-4 text-center text-[#A94F1A] font-medium">{message}</p>

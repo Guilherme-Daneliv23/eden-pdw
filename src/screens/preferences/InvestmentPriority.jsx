@@ -74,7 +74,7 @@ export default function InvestmentPriorityPreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Prioridade de investimento salva com sucesso!")
+      setMessage("Prioridade de investimento salva com sucesso!")
 
       // 🔹 Redireciona para a próxima tela
       navigate("/set/preferences/drinks")
@@ -88,40 +88,49 @@ export default function InvestmentPriorityPreferenceScreen() {
 
   return (
     <div className="tela">
-      <h2>
-        O maior investimento será em qual parte?
-      </h2>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
 
-      <form onSubmit={handleSubmit} className="space-y-3">
-        {options.map((option) => (
-          <label
-            key={option}
-            className={`flex items-center px-4 py-3 rounded-xl border cursor-pointer ${
-              selectedOption === option
-                ? "bg-pink-500 text-white border-pink-500"
-                : "bg-gray-100 text-gray-700 border-gray-300"
-            }`}
+      <div className="areaForms">        
+        <h2>
+          O maior investimento será em qual parte?
+        </h2>
+
+        <form onSubmit={handleSubmit} className="space-y-3">
+          {options.map((option) => (
+            <label
+              key={option}
+              className={`flex items-center px-4 py-3 rounded-xl border cursor-pointer ${
+                selectedOption === option
+                  ? "bg-pink-500 text-white border-pink-500"
+                  : "bg-gray-100 text-gray-700 border-gray-300"
+              }`}
+            >
+              <input
+                type="radio"
+                name="investment"
+                value={option}
+                checked={selectedOption === option}
+                onChange={() => handleSelect(option)}
+                className="hidden"
+              />
+              {option}
+            </label>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading || !selectedOption}
+            className="btn btnBg"
           >
-            <input
-              type="radio"
-              name="investment"
-              value={option}
-              checked={selectedOption === option}
-              onChange={() => handleSelect(option)}
-              className="hidden"
-            />
-            {option}
-          </label>
-        ))}
-
-        <button
-          type="submit"
-          disabled={loading || !selectedOption}
-          className="btn btnBg"
-        >
-          {loading ? "Salvando..." : "Salvar investimento"}
-        </button>
-      </form>
+            {loading ? "Salvando..." : "Salvar investimento"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
     </div>

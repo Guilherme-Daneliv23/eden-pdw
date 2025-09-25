@@ -71,7 +71,7 @@ export default function GroomsScreen() {
 
       if (updateError) throw updateError
 
-      setMessage("✅ Noivos cadastrados com sucesso!")
+      setMessage("Noivos cadastrados com sucesso!")
 
       // redireciona para próxima tela
       navigate("/set/general-data-wedding")
@@ -85,46 +85,55 @@ export default function GroomsScreen() {
 
   return (
     <div className="tela">
-      <h2>Cadastro dos Noivos</h2>
-      <form onSubmit={handleSubmit}>
-        {[noivo1, noivo2].map((noivo, index) => (
-          <div className="mb-5" key={index}>
-            <h3>Noivo {index + 1}</h3>
-            <input
-              type="text"
-              placeholder="Nome"
-              value={noivo.nome}
-              onChange={(e) => handleChange(index + 1, "nome", e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Sobrenome"
-              value={noivo.sobrenome}
-              onChange={(e) => handleChange(index + 1, "sobrenome", e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Idade"
-              value={noivo.idade}
-              onChange={(e) => handleChange(index + 1, "idade", e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Sexo"
-              value={noivo.sexo}
-              onChange={(e) => handleChange(index + 1, "sexo", e.target.value)}
-              required
-            />
-          </div>
-        ))}
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
 
-        <button className="btn btnBg" type="submit" disabled={loading}>
-          {loading ? "Salvando..." : "Salvar Noivos"}
-        </button>
-      </form>
+      <div className="areaForms">
+        <h2>Cadastro dos Noivos</h2>
+        <form className="forms" onSubmit={handleSubmit}>
+          {[noivo1, noivo2].map((noivo, index) => (
+            <div key={index}>
+              <h3>Noivo {index + 1}</h3>
+              <input
+                type="text"
+                placeholder="Nome"
+                value={noivo.nome}
+                onChange={(e) => handleChange(index + 1, "nome", e.target.value)}
+                required
+              />
+              <input
+                type="text"
+                placeholder="Sobrenome"
+                value={noivo.sobrenome}
+                onChange={(e) => handleChange(index + 1, "sobrenome", e.target.value)}
+                required
+              />
+              <input
+                type="text"
+                placeholder="Idade"
+                value={noivo.idade}
+                onChange={(e) => handleChange(index + 1, "idade", e.target.value)}
+                required
+              />
+              <input
+                type="text"
+                placeholder="Sexo"
+                value={noivo.sexo}
+                onChange={(e) => handleChange(index + 1, "sexo", e.target.value)}
+                required
+              />
+            </div>
+          ))}
+
+          <button className="btn btnBg" type="submit" disabled={loading}>
+            {loading ? "Salvando..." : "Salvar Noivos"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && <p style={{ marginTop: 20 }}>{message}</p>}
     </div>

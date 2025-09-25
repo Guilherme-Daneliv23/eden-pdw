@@ -79,7 +79,7 @@ export default function GastronomyTypePreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de gastronomia salvas com sucesso!")
+      setMessage("Preferências de gastronomia salvas com sucesso!")
 
       // 🔹 Redireciona para próxima tela
       navigate("/set/preferences/gastronomy-main-options")
@@ -93,7 +93,13 @@ export default function GastronomyTypePreferenceScreen() {
 
   return (
     <div className="tela">
-      <div>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
+
+      <div className="areaForms">
         <h2>
           Qual a melhor maneira de aproveitar uma boa comida?
         </h2>
@@ -120,6 +126,7 @@ export default function GastronomyTypePreferenceScreen() {
           </button>
         </form>
       </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && (
         <p className="mt-4 text-center text-[#A94F1A]">{message}</p>

@@ -79,7 +79,7 @@ export default function GiftPreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferência de lembrancinhas salva com sucesso!")
+      setMessage("Preferência de lembrancinhas salva com sucesso!")
 
       // 🔹 Redireciona para próxima tela
       navigate("/set/preferences/first-priority")
@@ -93,34 +93,43 @@ export default function GiftPreferenceScreen() {
 
   return (
     <div className="tela">
-      <h2>
-        Que tipo de lembrancinha seus convidados terão desse dia?
-      </h2>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
 
-      <form onSubmit={handleSubmit}>
-        {options.map((option) => (
-          <label
-            key={option}
-            className="labelCheckbox"
+      <div className="areaForms">        
+        <h2>
+          Que tipo de lembrancinha seus convidados terão desse dia?
+        </h2>
+
+        <form onSubmit={handleSubmit}>
+          {options.map((option) => (
+            <label
+              key={option}
+              className="labelCheckbox"
+            >
+              <input
+                type="checkbox"
+                checked={selectedOptions.includes(option)}
+                onChange={() => toggleOption(option)}
+                className="checkbox"
+              />
+              <span>{option}</span>
+            </label>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btnBg"
           >
-            <input
-              type="checkbox"
-              checked={selectedOptions.includes(option)}
-              onChange={() => toggleOption(option)}
-              className="checkbox"
-            />
-            <span>{option}</span>
-          </label>
-        ))}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btnBg"
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
+            {loading ? "Salvando..." : "Salvar preferências"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && (
         <p className="mt-4 text-center text-gray-700">{message}</p>

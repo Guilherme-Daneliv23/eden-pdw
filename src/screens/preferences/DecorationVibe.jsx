@@ -79,7 +79,7 @@ export default function DecorationVibePreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferência de decoração salva com sucesso!")
+      setMessage("Preferência de decoração salva com sucesso!")
 
       // 🔹 redireciona para convites
       navigate("/set/preferences/invitation")
@@ -93,36 +93,44 @@ export default function DecorationVibePreferenceScreen() {
 
   return (
     <div className="tela">
-      <h2>
-        Qual a vibe de vocês para a decoração do casamento?
-      </h2>
-      <form onSubmit={handleSubmit}>
-        {options.map((option, index) => (
-          <label
-            key={index}
-            className="labelCheckbox"
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
+
+      <div className="areaForms">        
+        <h2>
+          Qual a vibe de vocês para a decoração do casamento?
+        </h2>
+        <form onSubmit={handleSubmit}>
+          {options.map((option, index) => (
+            <label
+              key={index}
+              className="labelCheckbox"
+            >
+              <input
+                type="checkbox"
+                checked={selectedOptions.includes(option)}
+                onChange={() => handleSelect(option)}
+                className="checkbox"
+              />
+              <span>{option}</span>
+            </label>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btnBg"
           >
-            <input
-              type="checkbox"
-              checked={selectedOptions.includes(option)}
-              onChange={() => handleSelect(option)}
-              className="checkbox"
-            />
-            <span>{option}</span>
-          </label>
-        ))}
+            {loading ? "Salvando..." : "Salvar preferências"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btnBg"
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
-
-      {message && (
-        <p className="mt-4 text-center text-[#A94F1A] font-medium">{message}</p>
+      {message && (<p className="mt-4 text-center text-[#A94F1A] font-medium">{message}</p>
       )}
     </div>
   )

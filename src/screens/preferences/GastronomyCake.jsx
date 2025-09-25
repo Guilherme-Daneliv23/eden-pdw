@@ -79,7 +79,7 @@ export default function GastronomyCakePreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de bolo salvas com sucesso!")
+      setMessage("Preferências de bolo salvas com sucesso!")
 
       // 🔹 Redireciona para próxima tela
       navigate("/set/preferences/dream-scenario")
@@ -93,7 +93,13 @@ export default function GastronomyCakePreferencesScreen() {
 
   return (
     <div className="tela">
-      <div>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
+
+      <div className="areaForms">
         <h2>
           Os favoritos para o sabor do bolo
         </h2>
@@ -120,6 +126,7 @@ export default function GastronomyCakePreferencesScreen() {
           </button>
         </form>
       </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && (
         <p className="mt-4 text-center text-[#A94F1A]">{message}</p>

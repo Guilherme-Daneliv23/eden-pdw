@@ -46,7 +46,7 @@ export default function SignUpScreen() {
 
       if (insertError) throw insertError
 
-      setMessage("✅ Conta criada, sessão iniciada e casamento iniciado!")
+      setMessage("Conta criada, sessão iniciada e casamento iniciado!")
 
       setTimeout(() => navigate("/set/grooms"), 1200)
 
@@ -96,6 +96,9 @@ export default function SignUpScreen() {
           </button>
         </form>
       </div>
+      <button className="btn btnT" onClick={() => navigate("/")}>
+          Já tenho uma conta
+      </button>
 
       <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 

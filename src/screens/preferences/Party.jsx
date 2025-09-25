@@ -92,29 +92,38 @@ export default function PartyPreferencesScreen() {
 
   return (
     <div className="tela">
-      <h2>Como gostariam que fosse a alma da festa?</h2>
-      <form onSubmit={handleSubmit}>
-        {options.map((option) => (
-          <div key={option}>
-            <label className="labelCheckbox">
-              <input className="checkbox"
-                type="checkbox"
-                checked={selectedOptions.includes(option)}
-                onChange={() => handleToggle(option)}
-              />
-              {" "}{option}
-            </label>
-          </div>
-        ))}
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btnBg"
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
+      <div className="areaForms">        
+        <h2>Como gostariam que fosse a alma da festa?</h2>
+        <form onSubmit={handleSubmit}>
+          {options.map((option) => (
+            <div key={option}>
+              <label className="labelCheckbox">
+                <input className="checkbox"
+                  type="checkbox"
+                  checked={selectedOptions.includes(option)}
+                  onChange={() => handleToggle(option)}
+                />
+                {" "}{option}
+              </label>
+            </div>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btnBg"
+          >
+            {loading ? "Salvando..." : "Salvar preferências"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && <p style={{ marginTop: 20 }}>{message}</p>}
     </div>

@@ -80,7 +80,7 @@ export default function GastronomyMainOptionsPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Opções principais de gastronomia salvas com sucesso!")
+      setMessage("Opções principais de gastronomia salvas com sucesso!")
 
       // 🔹 Redireciona para próxima tela
       navigate("/set/preferences/gastronomy-cake")
@@ -94,7 +94,13 @@ export default function GastronomyMainOptionsPreferencesScreen() {
 
   return (
     <div className="tela">
-      <div>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
+
+      <div className="areaForms">
         <h2>
           O que não pode faltar no cardápio?
         </h2>

@@ -41,7 +41,7 @@ export default function SignInScreen() {
       </select>
       
       <div className="areaForms">
-        <h2>Bem-vindos,<br/>noivos!</h2>
+        <h2>Que bom vê-los,<br/>noivos!</h2>
 
         <form onSubmit={handleLogin}>
           <div className="inputBox">

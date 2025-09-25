@@ -62,7 +62,7 @@ export default function DreamsIdeasPreferenceScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Sonho/ideia salvo com sucesso!")
+      setMessage("Sonho/ideia salvo com sucesso!")
 
       // 🔹 Redireciona para home
       navigate("/home")
@@ -76,7 +76,13 @@ export default function DreamsIdeasPreferenceScreen() {
 
   return (
     <div className="tela">
-      <div>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
+
+      <div className="areaForms">
         <h2>
           Nos conte, existe algo que você sonhou e não encontrou aqui?
         </h2>
@@ -99,6 +105,7 @@ export default function DreamsIdeasPreferenceScreen() {
           </button>
         </form>
       </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && (
         <p className="mt-4 text-center text-[#A94F1A]">{message}</p>

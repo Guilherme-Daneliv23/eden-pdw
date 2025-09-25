@@ -78,7 +78,7 @@ export default function DrinksPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de bebidas salvas com sucesso!")
+      setMessage("Preferências de bebidas salvas com sucesso!")
 
       // 🔹 Redireciona para a próxima tela
       navigate("/set/preferences/extra-services")
@@ -92,34 +92,43 @@ export default function DrinksPreferencesScreen() {
 
   return (
     <div className="tela">
-      <h2>
-        E quanto às bebidas, o que gostaria de fazer?
-      </h2>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
 
-      <form onSubmit={handleSubmit}>
-        {options.map((option) => (
-          <label
-            key={option}
-            className="labelCheckbox"
+      <div className="areaForms">        
+        <h2>
+          E quanto às bebidas, o que gostaria de fazer?
+        </h2>
+
+        <form onSubmit={handleSubmit}>
+          {options.map((option) => (
+            <label
+              key={option}
+              className="labelCheckbox"
+            >
+              <input
+                type="checkbox"
+                checked={selectedOptions.includes(option)}
+                onChange={() => toggleOption(option)}
+                className="checkbox"
+              />
+              <span>{option}</span>
+            </label>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btnBg"
           >
-            <input
-              type="checkbox"
-              checked={selectedOptions.includes(option)}
-              onChange={() => toggleOption(option)}
-              className="checkbox"
-            />
-            <span>{option}</span>
-          </label>
-        ))}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btnBg"
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
+            {loading ? "Salvando..." : "Salvar preferências"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && <p className="mt-4 text-center text-gray-700">{message}</p>}
     </div>

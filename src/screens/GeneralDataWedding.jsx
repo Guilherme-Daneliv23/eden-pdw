@@ -129,45 +129,53 @@ export default function GeneralDataWeddingScreen() {
 
   return (
     <div className="tela">
-      <h2>Planejamento do Casamento</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="inputBox">
-          <input
-            type="number"
-            value={budget}
-            onChange={(e) => setBudget(e.target.value)}
-            required
-            placeholder=" "
-          />
-          <label>Até quanto espera gastar?</label>
-        </div>
-        
-        <div className="inputBox">
-          <input
-            type="date"
-            value={weddingDate}
-            onChange={(e) => setWeddingDate(e.target.value)}
-            required
-            placeholder=" "
-          />
-          <label>Qual a data ideal?</label>
-        </div>
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
+      <div className="areaForms">        
+        <h2>Planejamento do Casamento</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="inputBox">
+            <input
+              type="number"
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+              required
+              placeholder=" "
+            />
+            <label>Até quanto espera gastar?</label>
+          </div>
+          
+          <div className="inputBox">
+            <input
+              type="date"
+              value={weddingDate}
+              onChange={(e) => setWeddingDate(e.target.value)}
+              required
+              placeholder=" "
+            />
+            <label>Qual a data ideal?</label>
+          </div>
 
-        <div className="inputBox">
-          <input
-            type="number"
-            value={guests}
-            onChange={(e) => setGuests(e.target.value)}
-            required
-            placeholder=" "
-          />
-          <label>Em média, quantos convidados?</label>
-        </div>
+          <div className="inputBox">
+            <input
+              type="number"
+              value={guests}
+              onChange={(e) => setGuests(e.target.value)}
+              required
+              placeholder=" "
+            />
+            <label>Em média, quantos convidados?</label>
+          </div>
 
-        <button className="btn btnBg" type="submit" disabled={loading} style={{ padding: 10, width: "100%" }}>
-          {loading ? "Salvando..." : "Salvar informações"}
-        </button>
-      </form>
+          <button className="btn btnBg" type="submit" disabled={loading} style={{ padding: 10, width: "100%" }}>
+            {loading ? "Salvando..." : "Salvar informações"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && <p style={{ marginTop: 20 }}>{message}</p>}
     </div>

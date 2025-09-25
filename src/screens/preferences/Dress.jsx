@@ -79,7 +79,7 @@ export default function DressPreferencesScreen() {
         if (linkError) throw linkError
       }
 
-      setMessage("✅ Preferências de vestido salvas com sucesso!")
+      setMessage("Preferências de vestido salvas com sucesso!")
 
       // 🔹 redireciona para próxima tela
       navigate("/set/preferences/party")
@@ -93,30 +93,39 @@ export default function DressPreferencesScreen() {
 
   return (
     <div className="tela">
-      <h2>Para você, como seria “O vestido ideal”?</h2>
-      <form onSubmit={handleSubmit}>
-        {options.map((option) => (
-          <div key={option} style={{ marginBottom: 8 }}>
-            <label className="labelCheckbox">
-              <input
-                type="checkbox"
-                checked={selectedOptions.includes(option)}
-                onChange={() => handleToggle(option)}
-                className="checkbox"
-              />
-              {" "}{option}
-            </label>
-          </div>
-        ))}
+      <select
+        className="idioma"
+      >
+        <option value="idioma1">Português (Brasil)</option>
+      </select>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btnBg"
-        >
-          {loading ? "Salvando..." : "Salvar preferências"}
-        </button>
-      </form>
+      <div className="areaForms">        
+        <h2>Para você, como seria “O vestido ideal”?</h2>
+        <form onSubmit={handleSubmit}>
+          {options.map((option) => (
+            <div key={option} style={{ marginBottom: 8 }}>
+              <label className="labelCheckbox">
+                <input
+                  type="checkbox"
+                  checked={selectedOptions.includes(option)}
+                  onChange={() => handleToggle(option)}
+                  className="checkbox"
+                />
+                {" "}{option}
+              </label>
+            </div>
+          ))}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="btn btnBg"
+          >
+            {loading ? "Salvando..." : "Salvar preferências"}
+          </button>
+        </form>
+      </div>
+      <img className="logoHorizontal" src={logoHorizontal} alt="Logo Éden"/>
 
       {message && <p style={{ marginTop: 20 }}>{message}</p>}
     </div>
